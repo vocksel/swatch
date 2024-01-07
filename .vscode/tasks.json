@@ -1,0 +1,38 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install packages",
+      "type": "shell",
+      "problemMatcher": [],
+      "command": "just wally-install"
+    },
+    {
+      "label": "Build (Development)",
+      "type": "shell",
+      "problemMatcher": [],
+      "command": "just build dev",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Build (Production)",
+      "type": "shell",
+      "problemMatcher": [],
+      "command": "just build prod",
+      "group": {
+        "kind": "build",
+      }
+    },
+    {
+      "label": "Build and watch",
+      "type": "shell",
+      "problemMatcher": [],
+      "command": "just build-watch"
+    }
+  ]
+}

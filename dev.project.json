@@ -1,0 +1,9 @@
+{
+  "name": "rbxtheme",
+  "tree": {
+    "Packages": {
+      "$path": "Packages"
+    },
+    "$path": "src"
+  }
+}

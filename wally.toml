@@ -1,0 +1,11 @@
+[package]
+name = "vocksel/rbxtheme"
+version = "0.1.0"
+license = "MIT"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+exclude = ["*"]
+
+[dependencies]
+Promise = "evaera/promise@4.0.0"
+Sift = "csqrl/sift@0.0.4"

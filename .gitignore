@@ -1,0 +1,14 @@
+# Rojo
+/*.rbxl*
+/*.rbxm*
+
+# Luau
+sourcemap.json
+
+# Wally
+/DevPackages
+/Packages
+/wally.lock
+
+# Other
+/*.log
