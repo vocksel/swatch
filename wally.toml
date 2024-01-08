@@ -7,5 +7,7 @@ realm = "shared"
 exclude = ["*"]
 
 [dependencies]
+React = "jsdotlua/react@17.1.0"
+ReactRoblox = "jsdotlua/react-roblox@17.1.0"
 Promise = "evaera/promise@4.0.0"
 Sift = "csqrl/sift@0.0.4"
