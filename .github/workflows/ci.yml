@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: extractions/setup-just@v1
+
+      - uses: Roblox/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint
+        run: just lint
+
+      - name: Get model file name
+        run: |
+          name=$(jq -r .name default.project.json)
+          sha=${GITHUB_SHA:0:7}
+          echo "MODEL_FILE=$name-$sha.rbxm" >> $GITHUB_ENV
+
+      - name: Build
+        run: just build-here prod ${{ env.MODEL_NAME }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.MODEL_FILE }}
+          path: ${{ env.MODEL_FILE }}
+
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: extractions/setup-just@v1
+
+      - uses: Roblox/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Luau analysis
+        run: just analyze
+
+  scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Ensure each script is executable
+        run: |
+          for f in ./bin/*; do
+              if [[ ! -x "$f" ]]; then
+                  echo "Script '$f' is not executable"
+                  exit 1
+              fi
+          done

@@ -20,13 +20,16 @@ lint:
 	selene src/
 	stylua --check src/
 
-_build target watch:
-	./bin/build.py --target {{target}} --output {{ plugin_path }} {{ if watch == "true"  { "--watch" } else { "" } }}
-
 wally-install:
 	wally install
 	rojo sourcemap tests.project.json -o "{{tmpdir}}/sourcemap.json"
 	wally-package-types --sourcemap "{{tmpdir}}/sourcemap.json" Packages/
+
+_init:
+	{{ if path_exists("Packages") == "false" { `just wally-install` } else {``} }}
+
+_build target watch: _init
+	./bin/build.py --target {{target}} --output {{ plugin_path }} {{ if watch == "true"  { "--watch" } else { "" } }}
 
 build target="prod":
 	just _build {{target}} false
@@ -34,16 +37,14 @@ build target="prod":
 build-watch target="prod":
 	just _build {{target}} true
 
-build-here target="prod" filename=plugin_filename:
+build-here target="prod" filename=plugin_filename: _init
 	./bin/build.py --target {{target}} --output {{ filename }}
 
 test: clean
     rojo build tests.project.json -o {{tmpdir / "tests.rbxl"}}
     run-in-roblox --place {{tmpdir / "tests.rbxl"}} --script tests/init.server.lua
 
-analyze:
+analyze: _init
   curl -s -o "{{tmpdir}}/globalTypes.d.lua" -O https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/master/scripts/globalTypes.d.lua
-
   rojo sourcemap tests.project.json -o "{{tmpdir}}/sourcemap.json"
-
   luau-lsp analyze --sourcemap="{{tmpdir}}/sourcemap.json" --defs="{{tmpdir}}/globalTypes.d.lua" --defs=testez.d.lua --ignore=**/_Index/** src/
