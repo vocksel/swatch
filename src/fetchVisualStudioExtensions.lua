@@ -4,8 +4,7 @@ local HttpService = game:GetService("HttpService")
 
 local Sift = require(Root.Packages.Sift)
 local request = require(Root.request)
-
-local MARKETPLACE_URL = "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery"
+local urls = require(Root.urls)
 
 export type FetchOptions = {
 	searchTerm: string?,
@@ -127,7 +126,7 @@ local function fetchVisualStudioExtensions(providedOptions: FetchOptions?)
 
 	return request({
 			Method = "POST",
-			Url = MARKETPLACE_URL,
+			Url = `{urls.MARKETPLACE_APIS_URL}/public/gallery/extensionquery`,
 			Body = HttpService:JSONEncode(body),
 			Headers = {
 				["Content-Type"] = "application/json",
