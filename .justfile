@@ -46,6 +46,12 @@ test: init clean
     rojo build tests.project.json -o {{tmpdir / "tests.rbxl"}}
     run-in-roblox --place {{tmpdir / "tests.rbxl"}} --script tests/init.server.lua
 
+serve:
+	lune server/server.luau
+
+serve-watch:
+	npx -y chokidar-cli 'server/**/*' -c "just serve" --initial
+
 analyze: init
   curl -s -o "{{tmpdir}}/globalTypes.d.lua" -O https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/master/scripts/globalTypes.d.lua
 
