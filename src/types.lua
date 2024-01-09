@@ -33,14 +33,25 @@ export type ArtifactProperty = {
 	value: any,
 }
 
-export type ExtensionVersionArtifact = {
+export type ExtensionProperty = ArtifactProperty
+
+export type ExtensionBadge = {}
+
+export type ExtensionFile = ArtifactFile
+
+export type ExtensionVersion = {
+
 	assetUri: string,
+	badges: { ExtensionBadge },
 	fallbackAssetUri: string,
-	files: { ArtifactFile },
-	flags: string,
+	files: { ExtensionFile },
+	flags: number,
 	lastUpdated: string,
-	properties: { ArtifactProperty },
+	properties: { ExtensionProperty },
+	targetPlatform: string,
+	validationResultMessage: string,
 	version: string,
+	versionDescription: string,
 }
 
 export type Extension = {
@@ -58,7 +69,7 @@ export type Extension = {
 	shortDescription: string,
 	statistics: { ExtensionStatistic },
 	tags: { string },
-	versions: { ExtensionVersionArtifact },
+	versions: { ExtensionVersion },
 }
 
 type ExtensionCapabilities = {
@@ -79,7 +90,13 @@ export type ExtensionManifest = {
 		[string]: ExtensionCapabilities,
 	},
 	categories: { string },
-	contributes: { any }, -- stub
+	contributes: {
+		themes: {
+			label: string,
+			path: string,
+			uiTheme: string,
+		},
+	}, -- stub
 	dependencies: { [string]: string },
 	description: string,
 	devDependencies: { [string]: string },
@@ -108,6 +125,62 @@ export type ExtensionManifest = {
 	},
 	version: string,
 	themes: { any }, -- stub
+}
+
+-- Upstream: https://learn.microsoft.com/en-us/javascript/api/azure-devops-extension-api/
+
+export type FilterCriteria = {
+	filterType: number,
+	value: string,
+}
+
+export type QueryFilter = {
+	criteria: { FilterCriteria },
+	direction: number,
+	pageNumber: number,
+	pageSize: number,
+	pagingToken: string,
+	sortBy: number,
+	sortOrder: number,
+}
+
+export type ExtensionQuery = {
+	assetTypes: { string },
+	filters: { QueryFilter },
+	flags: number,
+}
+
+export type PublisherFacts = Publisher
+
+export type PublishedExtension = {
+	categories: { string },
+	deploymentType: number,
+	displayName: string,
+	extensionId: string,
+	extensionName: string,
+	flags: string,
+	installationTargets: { InstallationTarget },
+	lastUpdated: string,
+	longDescription: string,
+	presentInConflictList: string,
+	publishedDate: string,
+	publisher: PublisherFacts,
+	releaseDate: string,
+	sharedWith: { any },
+	shortDescription: string,
+	statistics: { ExtensionStatistic },
+	tags: { string },
+	versions: { ExtensionVersion },
+}
+
+export type ExtensionFilterResult = {
+	extensions: { PublishedExtension },
+	pagingToken: string?,
+	resultMetadata: { any },
+}
+
+export type ExtensionQueryResult = {
+	results: { ExtensionFilterResult },
 }
 
 return nil

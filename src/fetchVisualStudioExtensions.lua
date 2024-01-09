@@ -84,7 +84,7 @@ local function fetchVisualStudioExtensions(providedOptions: FetchOptions?)
 						filterType = 8,
 						value = "Microsoft.VisualStudio.Code",
 					},
-					if options.searchThem
+					if options.searchTerm
 						then {
 							filterType = 10,
 							value = options.searchTerm,

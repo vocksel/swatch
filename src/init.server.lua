@@ -1,47 +1,40 @@
 local fetchVisualStudioExtensions = require(script.fetchVisualStudioExtensions)
+local fetchExtensionManifest = require(script.fetchExtensionManifest)
+local fetchExtensionThemes = require(script.fetchExtensionThemes)
+local fetchExtensionArtifact = require(script.fetchExtensionArtifact)
 local types = require(script.types)
-local request = require(script.request)
 
 fetchVisualStudioExtensions({
+		searchTerm = "theme",
 		includeLatestVersionOnly = true,
 	})
 	:andThen(function(extensions: { types.Extension })
-		print("extensions", extensions)
-
 		local extension = extensions[1]
 		local latestVersion = extension.versions[1]
 
-		print("latestVersion", latestVersion)
+		assert(latestVersion, "No latest version found for extension {extension.displayName}")
 
-		local manifest: types.ArtifactFile
-		if latestVersion then
-			for _, file in latestVersion.files do
-				if file.assetType == "Microsoft.VisualStudio.Code.Manifest" then
-					manifest = file
-				end
-			end
+		-- The resulting vsix file should be able to be unzipped, but I don't think that's possible in Roblox
+		local success, artifact = fetchExtensionArtifact(
+			extension.publisher.publisherName,
+			extension.extensionName,
+			latestVersion.version
+		):await()
+		print("artifact", artifact)
+
+		local _success, manifest = fetchExtensionManifest(latestVersion):await()
+
+		return extension, manifest
+	end)
+	-- :andThen(function(extension: types.Extension, manifest: types.ExtensionManifest)
+	-- 	print("extension", extension, "manifest", manifest)
+	-- 	return fetchExtensionThemes(extension, manifest)
+	-- end)
+	-- :andThen(function(themes)
+	-- 	print("themes", themes)
+	-- end)
+	:catch(
+		function(err)
+			print("error:", err)
 		end
-
-		assert(manifest and manifest.source, "No manifest found for {extension.displayName} v{latestVersion.version}")
-
-		if manifest and manifest.source then
-			print("source", manifest.source)
-			return request({
-				Method = "GET",
-				Url = manifest.source,
-				Headers = {
-					["Content-Type"] = "application/json",
-					Accept = `application/json; charset=utf-8;`,
-				},
-			})
-		else
-			error("No manifest found for artifact: {artifact}")
-		end
-	end)
-	:andThen(function(res)
-		local manifest: types.ExtensionManifest = res.Body
-		print("manifest", manifest)
-	end)
-	:catch(function(err)
-		print("error:", err)
-	end)
+	)
