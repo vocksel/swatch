@@ -20,18 +20,19 @@ lint:
 	selene src/
 	stylua --check src/
 
-_build target watch: init
+_build target watch:
 	mkdir -p {{ parent_directory(plugin_path) }}
 	./bin/build.py --target {{target}} --output {{ plugin_path }} {{ if watch == "true"  { "--watch" } else { "" } }}
+
+init:
+	foreman install
+	lune --setup
+	just wally-install
 
 wally-install:
 	wally install
 	rojo sourcemap tests.project.json -o "{{tmpdir}}/sourcemap.json"
 	wally-package-types --sourcemap "{{tmpdir}}/sourcemap.json" Packages/
-
-init:
-	foreman install
-	just wally-install
 
 build target="prod":
 	just _build {{target}} false
@@ -42,7 +43,7 @@ build-watch target="prod":
 build-here target="prod" filename=plugin_filename:
 	./bin/build.py --target {{target}} --output {{ filename }}
 
-test: init clean
+test: clean
     rojo build tests.project.json -o {{tmpdir / "tests.rbxl"}}
     run-in-roblox --place {{tmpdir / "tests.rbxl"}} --script tests/init.server.lua
 
@@ -52,7 +53,7 @@ serve:
 serve-watch:
 	npx -y chokidar-cli 'server/**/*' -c "just serve" --initial
 
-analyze: init
+analyze:
   curl -s -o "{{tmpdir}}/globalTypes.d.lua" -O https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/master/scripts/globalTypes.d.lua
 
   rojo sourcemap tests.project.json -o "{{tmpdir}}/sourcemap.json"
