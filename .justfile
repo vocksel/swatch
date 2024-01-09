@@ -7,22 +7,23 @@ plugins_dir := if os_family() == "unix" {
 	"$LOCALAPPDATA/Roblox/Plugins"
 }
 plugin_filename := project_name + ".rbxm"
-plugin_path := plugins_dir / plugin_filename
+plugin_source := "plugin"
+plugin_output_path := plugins_dir / plugin_filename
 tmpdir := `mktemp -d`
 
 default:
   @just --list
 
 clean:
-	rm -rf {{plugin_path}}
+	rm -rf {{ plugin_output_path }}
 
 lint:
-	selene src/
-	stylua --check src/
+	selene {{ plugin_source }}
+	stylua --check {{ plugin_source }}
 
 _build target watch:
-	mkdir -p {{ parent_directory(plugin_path) }}
-	./bin/build.py --target {{target}} --output {{ plugin_path }} {{ if watch == "true"  { "--watch" } else { "" } }}
+	mkdir -p {{ parent_directory(plugin_output_path) }}
+	./bin/build.py --target {{target}} --output {{ plugin_output_path }} {{ if watch == "true"  { "--watch" } else { "" } }}
 
 init:
 	foreman install
@@ -58,4 +59,4 @@ analyze:
 
   rojo sourcemap tests.project.json -o "{{tmpdir}}/sourcemap.json"
 
-  luau-lsp analyze --sourcemap="{{tmpdir}}/sourcemap.json" --defs="{{tmpdir}}/globalTypes.d.lua" --defs=testez.d.lua --ignore=**/_Index/** src/
+  luau-lsp analyze --sourcemap="{{tmpdir}}/sourcemap.json" --defs="{{tmpdir}}/globalTypes.d.lua" --defs=testez.d.lua --ignore=**/_Index/** {{ plugin_source }}
