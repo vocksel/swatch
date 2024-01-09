@@ -17,6 +17,12 @@ local function getThemes(request)
 	local extensionName = request.query.extensionName
 	local extensionVersion = request.query.extensionVersion
 
+	if not (publisherName or extensionName or extensionVersion) then
+		return {
+			status = 500,
+		}
+	end
+
 	local res = net.request({
 		method = "GET",
 		url = createExtensionDownloadUrl(publisherName, extensionName, extensionVersion),

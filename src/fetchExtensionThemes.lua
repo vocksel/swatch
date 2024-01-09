@@ -2,33 +2,21 @@ local Root = script:FindFirstAncestor("rbxtheme")
 
 local HttpService = game:GetService("HttpService")
 
-local Promise = require(Root.Packages.Promise)
+local createUrl = require(Root.createUrl)
 local request = require(Root.request)
 local types = require(Root.types)
 
-local function fetchExtensionThemes(extension: types.ExtensionVersion, manifest: types.ExtensionManifest)
-	local promises = {}
-	local baseUrl = manifest.repository.url
-	local themes = if manifest.contributes.themes then manifest.contributes.themes else manifest.themes
-
-	for _, theme in themes do
-		print(theme.label)
-		local promise = request({
-			Method = "GET",
-			Url = `{baseUrl}/{theme.path}`,
-			Headers = {
-				["Content-Type"] = "application/json",
-				Accept = `application/json; charset=utf-8;`,
-			},
-		}):andThen(function(res)
-			print("res", res)
-			return HttpService:JSONDecode(res.Body)
-		end)
-
-		table.insert(promises, promise)
-	end
-
-	return Promise.all(promises)
+local function fetchExtensionThemes(extension: types.PublishedExtension, version: string)
+	return request({
+		Method = "GET",
+		Url = createUrl("http://localhost:8080/get-themes", {
+			extensionName = extension.extensionName,
+			publisherName = extension.publisher.publisherName,
+			extensionVersion = version,
+		}),
+	}):andThen(function(res)
+		return HttpService:JSONDecode(res.Body)
+	end)
 end
 
 return fetchExtensionThemes

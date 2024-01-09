@@ -40,7 +40,6 @@ export type ExtensionBadge = {}
 export type ExtensionFile = ArtifactFile
 
 export type ExtensionVersion = {
-
 	assetUri: string,
 	badges: { ExtensionBadge },
 	fallbackAssetUri: string,
