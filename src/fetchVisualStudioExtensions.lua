@@ -5,6 +5,7 @@ local HttpService = game:GetService("HttpService")
 local Sift = require(Root.Packages.Sift)
 local request = require(Root.request)
 local urls = require(Root.urls)
+local types = require(Root.types)
 
 export type FetchOptions = {
 	searchTerm: string?,
@@ -23,28 +24,6 @@ export type FetchOptions = {
 	unpublished: boolean?,
 	includeNameConflictInfo: boolean?,
 	apiVersion: string?,
-}
-
-type VsMarketplacePublisher = {
-	displayName: string,
-	domain: string,
-	flags: string,
-	isDomainVerified: boolean,
-	publisherId: string,
-	publisherName: string,
-}
-
-export type VsMarketplaceExtension = {
-	deploymentType: number,
-	displayName: string,
-	extensionId: string,
-	extensionName: string,
-	flags: string,
-	lastUpdated: string,
-	publishedDate: string,
-	publisher: VsMarketplacePublisher,
-	releaseDate: string,
-	shortDescription: string,
 }
 
 local DEFAULT_FETCH_OPTIONS: FetchOptions = {
@@ -85,17 +64,17 @@ local OPTION_TO_FLAG_MAP = {
 local function fetchVisualStudioExtensions(providedOptions: FetchOptions?)
 	local options = Sift.Dictionary.join(DEFAULT_FETCH_OPTIONS, providedOptions)
 
-	-- print("options", options)
+	--print("options", options)
 
 	local flags = 0
-	for _, option in options do
+	for option in options do
 		local flag = OPTION_TO_FLAG_MAP[option]
 		if flag then
 			flags = bit32.bxor(flags, flag)
 		end
 	end
 
-	-- print("flags", flags)
+	--print("flags", flags)
 
 	local body = {
 		filters = {
@@ -122,7 +101,7 @@ local function fetchVisualStudioExtensions(providedOptions: FetchOptions?)
 		flags = flags,
 	}
 
-	-- print("body", body)
+	--print("body", body)
 
 	return request({
 			Method = "POST",
@@ -134,15 +113,15 @@ local function fetchVisualStudioExtensions(providedOptions: FetchOptions?)
 			},
 		})
 		:andThen(function(res)
-			-- print("res", res)
+			--print("res", res)
 			return HttpService:JSONDecode(res.Body)
 		end)
 		:andThen(function(res)
 			local extensions = res.results[1].extensions
 			if extensions then
-				return extensions :: { VsMarketplaceExtension }
+				return extensions :: { types.Extension }
 			else
-				return {} :: { VsMarketplaceExtension }
+				return {} :: { types.Extension }
 			end
 		end)
 end
