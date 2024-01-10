@@ -8,22 +8,22 @@ plugins_dir := if os_family() == "unix" {
 }
 plugin_filename := project_name + ".rbxm"
 plugin_source := "plugin"
-plugin_output_path := plugins_dir / plugin_filename
+plugin_output := plugins_dir / plugin_filename
 tmpdir := `mktemp -d`
 
 default:
   @just --list
 
 clean:
-	rm -rf {{ plugin_output_path }}
+	rm -rf {{ plugin_output }}
 
 lint:
 	selene {{ plugin_source }}
 	stylua --check {{ plugin_source }}
 
 _build target watch:
-	mkdir -p {{ parent_directory(plugin_output_path) }}
-	./bin/build.py --target {{target}} --output {{ plugin_output_path }} {{ if watch == "true"  { "--watch" } else { "" } }}
+	mkdir -p {{ parent_directory(plugin_output) }}
+	./bin/build.py --target {{target}} --output {{ plugin_output }} {{ if watch == "true"  { "--watch" } else { "" } }}
 
 init:
 	foreman install
