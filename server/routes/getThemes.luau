@@ -2,14 +2,42 @@ local process = require("@lune/process")
 local fs = require("@lune/fs")
 local net = require("@lune/net")
 local serde = require("@lune/serde")
+local fetch = require("../fetch")
 
-local function createExtensionDownloadUrl(publisherName: string, extensionName: string, extensionVersion: string)
-	return ("https://%s.gallery.vsassets.io/_apis/public/gallery/publisher/%s/extension/%s/%s/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"):format(
-		publisherName,
-		publisherName,
-		extensionName,
-		extensionVersion
-	)
+local function createExtensionDownloadUrl(
+	publisherName: string,
+	extensionName: string,
+	extensionVersion: string
+): string
+	return `https://{publisherName}.gallery.vsassets.io/_apis/public/gallery/publisher/{publisherName}/extension/`
+		.. `{extensionName}/{extensionVersion}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage`
+end
+
+local function fetchExtension(publisherName: string, extensionName: string, extensionVersion: string): string?
+	local extensionPath = `{publisherName}-{extensionName}-{extensionVersion}`
+
+	if fs.isDir(extensionPath) then
+		return extensionPath
+	else
+		local res = fetch({
+			method = "GET",
+			url = createExtensionDownloadUrl(publisherName, extensionName, extensionVersion),
+		})
+
+		if res.ok then
+			local zipPath = `{extensionPath}.zip`
+
+			fs.writeFile(zipPath, res.body)
+			res = process.spawn("unzip", { zipPath, "-d", extensionPath })
+			fs.removeFile(zipPath)
+
+			if res.ok then
+				return extensionPath
+			end
+		end
+
+		return nil
+	end
 end
 
 local function getThemes(request)
@@ -23,24 +51,10 @@ local function getThemes(request)
 		}
 	end
 
-	local res = net.request({
-		method = "GET",
-		url = createExtensionDownloadUrl(publisherName, extensionName, extensionVersion),
-	})
+	local extensionPath = fetchExtension(publisherName, extensionName, extensionVersion)
 
-	local extensionFilename = ("%s-%s-%s"):format(publisherName, extensionName, extensionVersion)
-
-	if res.ok then
-		local extensionZipFilename = ("%s.zip"):format(extensionFilename)
-		fs.writeFile(extensionZipFilename, res.body)
-
-		process.spawn("unzip", {
-			extensionZipFilename,
-			"-d",
-			extensionFilename,
-		})
-
-		local packageJsonPath = ("%s/extension/package.json"):format(extensionFilename)
+	if extensionPath then
+		local packageJsonPath = `{extensionPath}/extension/package.json`
 
 		if fs.isFile(packageJsonPath) then
 			local packageJson = serde.decode("json", fs.readFile(packageJsonPath))
@@ -50,15 +64,10 @@ local function getThemes(request)
 			if contributedThemes then
 				local themes = {}
 
-				-- print("contributedThemes", contributedThemes)
-
 				for _, theme in contributedThemes do
 					if theme.path then
-						local themeJsonPath = ("%s/extension/%s")
-							:format(extensionFilename, theme.path:sub(2, #theme.path))
-							:gsub("/+", "/")
-
-						-- print("themeJsonPath", themeJsonPath)
+						local partialThemePath = theme.path:gsub("%./", "")
+						local themeJsonPath = (`{extensionPath}/extension/{partialThemePath}`):gsub("//", "/")
 
 						if fs.isFile(themeJsonPath) then
 							local themeJson = serde.decode("json", fs.readFile(themeJsonPath))
@@ -67,8 +76,6 @@ local function getThemes(request)
 					end
 				end
 
-				-- print("themes", themes)
-
 				return {
 					status = 200,
 					body = net.jsonEncode(themes),
@@ -76,15 +83,12 @@ local function getThemes(request)
 			end
 		end
 
-		fs.removeFile(extensionZipFilename)
-		fs.removeDir(extensionFilename)
-
-		return {
-			status = 500,
-		}
-	else
-		return res
+		fs.removeDir(extensionPath)
 	end
+
+	return {
+		status = 500,
+	}
 end
 
 return {
