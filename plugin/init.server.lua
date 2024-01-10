@@ -16,6 +16,7 @@ fetchVisualStudioExtensions({
 	end)
 	:andThen(function(themes)
 		print("themes", themes)
+		print(require(script.getThemeColors)(themes[1]))
 	end)
 	:catch(function(err)
 		print("error:", err)
