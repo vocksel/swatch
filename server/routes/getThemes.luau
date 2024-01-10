@@ -70,6 +70,13 @@ local function getThemes(request)
 						local themeJsonPath = (`{extensionPath}/extension/{partialThemePath}`):gsub("//", "/")
 
 						if fs.isFile(themeJsonPath) then
+							-- FIXME: Both 'net.jsonDecode' and 'serde.decode'
+							-- can't handle JSON5, which means this will fail
+							-- for some themes that use it.
+							--
+							-- It would be great if a change could be added in
+							-- Lune for this, but worst case a JSON parser can
+							-- be installed and spun up as a separate process
 							local themeJson = serde.decode("json", fs.readFile(themeJsonPath))
 							table.insert(themes, themeJson)
 						end
