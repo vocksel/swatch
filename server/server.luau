@@ -21,13 +21,22 @@ net.serve(PORT, function(request)
 
 	for route, callback in routes do
 		if request.path == route then
-			return callback(request)
+			local success, result = pcall(callback, request)
+
+			if success then
+				return result
+			else
+				return {
+					status = 500,
+					body = result,
+				}
+			end
 		end
 	end
 
 	return {
-		status = 200,
-		body = "Echo:\n" .. request.body,
+		status = 404,
+		body = "Not Found",
 	}
 end)
 print("Server started on port", PORT)
