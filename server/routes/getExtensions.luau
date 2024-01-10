@@ -1,5 +1,4 @@
 local net = require("@lune/net")
-local serde = require("@lune/serde")
 local fetch = require("../fetch")
 
 export type FetchOptions = {
