@@ -26,11 +26,14 @@ local defaultPolling: Polling = {
 }
 
 local function request(payload)
+	local method = if payload.method then payload.method else "GET" :: HttpMethod
+
 	local function makeRequest()
+		print(`{method} {payload.url}`)
 		return Promise.new(function(resolve, reject)
 			local res = HttpService:RequestAsync({
 				Url = payload.url,
-				Method = payload.method,
+				Method = method,
 				Headers = payload.headers,
 				Body = payload.body,
 			})
