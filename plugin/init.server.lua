@@ -1,21 +1,29 @@
 local fetchVisualStudioExtensions = require(script.fetchVisualStudioExtensions)
 local fetchExtensionThemes = require(script.fetchExtensionThemes)
+local getThemeColors = require(script.getThemeColors)
 local types = require(script.types)
 local urls = require(script.urls)
 local request = require(script.request)
 
-local success = request({
-	url = `{urls.SERVER_URL}/health`,
-	polling = {
-		times = 5,
-		seconds = 10,
-	},
-}):await()
+do
+	local success = request({
+		url = `{urls.SERVER_URL}/health`,
+		polling = {
+			times = 5,
+			seconds = 10,
+		},
+	}):await()
 
-if success then
+	if not success then
+		warn("Failed to connect to server. Reload the experience to retry")
+		return
+	end
+end
+
+do
 	print("Established connection to server")
 
-	fetchVisualStudioExtensions({ searchTerm = "synthwave" })
+	local success, themes = fetchVisualStudioExtensions({ searchTerm = "synthwave" })
 		:andThen(function(extensions: { types.Extension })
 			local extension = extensions[1]
 			local latestVersion = extension.versions[1]
@@ -24,13 +32,30 @@ if success then
 
 			return fetchExtensionThemes(extension, latestVersion.version)
 		end)
-		:andThen(function(themes)
-			print("themes", themes)
-			print(require(script.getThemeColors)(themes[1]))
-		end)
 		:catch(function(err)
-			print("error:", err)
+			warn("ERR:", err)
 		end)
-else
-	warn("Failed to connect to server. Reload the experience to retry")
+		:await()
+
+	if success and themes then
+		print("themes", themes)
+		local theme = if #themes > 0 then themes[1] else nil
+
+		if theme then
+			local colors = getThemeColors(theme)
+
+			if colors and colors.found then
+				print("applying theme...")
+				for name, color in colors.found do
+					-- Discard the alpha component of the hexcode
+					if #color - 1 > 6 then
+						warn(`{name} uses unsupported alpha value`)
+						color = color:sub(7, #color)
+					end
+
+					settings().Studio[name] = Color3.fromHex(color)
+				end
+			end
+		end
+	end
 end
