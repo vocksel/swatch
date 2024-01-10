@@ -104,10 +104,10 @@ local function fetchVisualStudioExtensions(providedOptions: FetchOptions?)
 	--print("body", body)
 
 	return request({
-			Method = "POST",
-			Url = `{urls.MARKETPLACE_APIS_URL}/public/gallery/extensionquery`,
-			Body = HttpService:JSONEncode(body),
-			Headers = {
+			method = "POST",
+			url = `{urls.MARKETPLACE_APIS_URL}/public/gallery/extensionquery`,
+			body = HttpService:JSONEncode(body),
+			headers = {
 				["Content-Type"] = "application/json",
 				Accept = `application/json; charset=utf-8; api-version={options.apiVersion}`,
 			},

@@ -1,11 +1,24 @@
 local fetchVisualStudioExtensions = require(script.fetchVisualStudioExtensions)
 local fetchExtensionThemes = require(script.fetchExtensionThemes)
 local types = require(script.types)
+local urls = require(script.urls)
+local request = require(script.request)
 
-fetchVisualStudioExtensions({
-		searchTerm = "theme",
-		includeLatestVersionOnly = true,
+request({
+		url = `{urls.SERVER_URL}/health`,
+		polling = {
+			retries = 5,
+			delay = 10,
+		},
 	})
+	:andThen(function()
+		print("Established connection to server")
+
+		return fetchVisualStudioExtensions({
+			searchTerm = "theme",
+			includeLatestVersionOnly = true,
+		})
+	end)
 	:andThen(function(extensions: { types.Extension })
 		local extension = extensions[1]
 		local latestVersion = extension.versions[1]

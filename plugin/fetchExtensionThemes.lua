@@ -8,8 +8,8 @@ local types = require(Root.types)
 
 local function fetchExtensionThemes(extension: types.PublishedExtension, version: string)
 	return request({
-		Method = "GET",
-		Url = createUrl("http://localhost:8080/get-themes", {
+		method = "GET",
+		url = createUrl("http://localhost:8080/get-themes", {
 			extensionName = extension.extensionName,
 			publisherName = extension.publisher.publisherName,
 			extensionVersion = version,
