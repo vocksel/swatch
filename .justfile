@@ -1,5 +1,7 @@
 #!/usr/bin/env just --justfile
 
+set dotenv-load
+
 project_name := "rbxtheme"
 plugins_dir := if os_family() == "unix" {
 	"$HOME/Documents/Roblox/Plugins"
@@ -43,6 +45,9 @@ build-watch target="prod":
 
 build-here target="prod" filename=plugin_filename:
 	./bin/build.py --target {{target}} --output {{ filename }}
+
+docker-build:
+	docker build -t vscode-theme-importer-lua . --build-arg GITHUB_TOKEN=${GITHUB_TOKEN}
 
 test: clean
     rojo build tests.project.json -o {{tmpdir / "tests.rbxl"}}
