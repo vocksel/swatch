@@ -1,44 +1,8 @@
-local process = require("@lune/process")
 local fs = require("@lune/fs")
 local net = require("@lune/net")
 local serde = require("@lune/serde")
-local fetch = require("../fetch")
 
-local function createExtensionDownloadUrl(
-	publisherName: string,
-	extensionName: string,
-	extensionVersion: string
-): string
-	return `https://{publisherName}.gallery.vsassets.io/_apis/public/gallery/publisher/{publisherName}/extension/`
-		.. `{extensionName}/{extensionVersion}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage`
-end
-
-local function fetchExtension(publisherName: string, extensionName: string, extensionVersion: string): string?
-	local extensionPath = `{publisherName}-{extensionName}-{extensionVersion}`
-
-	if fs.isDir(extensionPath) then
-		return extensionPath
-	else
-		local res = fetch({
-			method = "GET",
-			url = createExtensionDownloadUrl(publisherName, extensionName, extensionVersion),
-		})
-
-		if res.ok then
-			local zipPath = `{extensionPath}.zip`
-
-			fs.writeFile(zipPath, res.body)
-			res = process.spawn("unzip", { zipPath, "-d", extensionPath })
-			fs.removeFile(zipPath)
-
-			if res.ok then
-				return extensionPath
-			end
-		end
-
-		return nil
-	end
-end
+local fetchExtension = require("../fetchExtension")
 
 local function getThemes(request)
 	local publisherName = request.query.publisherName
@@ -89,8 +53,6 @@ local function getThemes(request)
 				}
 			end
 		end
-
-		fs.removeDir(extensionPath)
 	end
 
 	return {
