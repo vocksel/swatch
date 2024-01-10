@@ -2,12 +2,13 @@ local process = require("@lune/process")
 local net = require("@lune/net")
 
 local getThemes = require("./routes/getThemes")
+local getExtensions = require("./routes/getExtensions")
 
 local PORT: string? = process.env.PORT or 8080
 
 local routes = {
 	[getThemes.route] = getThemes.callback,
-
+	[getExtensions.route] = getExtensions.callback,
 	["/health"] = function()
 		return {
 			status = 200,
@@ -17,7 +18,7 @@ local routes = {
 }
 
 net.serve(PORT, function(request)
-	print(("%s %s"):format(request.method, request.path))
+	print(`{request.method} {request.path}`)
 
 	for route, callback in routes do
 		if request.path == route then

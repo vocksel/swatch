@@ -15,10 +15,7 @@ local success = request({
 if success then
 	print("Established connection to server")
 
-	fetchVisualStudioExtensions({
-			searchTerm = "theme",
-			includeLatestVersionOnly = true,
-		})
+	fetchVisualStudioExtensions({ searchTerm = "synthwave" })
 		:andThen(function(extensions: { types.Extension })
 			local extension = extensions[1]
 			local latestVersion = extension.versions[1]
