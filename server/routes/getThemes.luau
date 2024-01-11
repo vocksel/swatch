@@ -3,6 +3,7 @@ local net = require("@lune/net")
 local serde = require("@lune/serde")
 
 local fetchExtension = require("../fetchExtension")
+local logging = require("../logging")
 
 local function getThemes(request)
 	local publisherName = request.query.publisherName
@@ -16,6 +17,8 @@ local function getThemes(request)
 	end
 
 	local extensionPath = fetchExtension(publisherName, extensionName, extensionVersion)
+
+	logging.info("extensionPath", extensionPath)
 
 	if extensionPath then
 		local packageJsonPath = `{extensionPath}/extension/package.json`
@@ -32,6 +35,7 @@ local function getThemes(request)
 					if theme.path then
 						local partialThemePath = theme.path:gsub("%./", "")
 						local themeJsonPath = (`{extensionPath}/extension/{partialThemePath}`):gsub("//", "/")
+						logging.info("loading theme", themeJsonPath)
 
 						if fs.isFile(themeJsonPath) then
 							-- FIXME: Both 'net.jsonDecode' and 'serde.decode'
@@ -48,8 +52,7 @@ local function getThemes(request)
 							if success then
 								table.insert(themes, result)
 							else
-								warn(`could not parse theme: {themeJsonPath}`)
-								warn(`err: {result}`)
+								logging.warn(`could not parse theme: {themeJsonPath}\n{result}`)
 							end
 						end
 					end

@@ -3,8 +3,10 @@ local net = require("@lune/net")
 
 local getThemes = require("./routes/getThemes")
 local getExtensions = require("./routes/getExtensions")
+local logging = require("./logging")
 
 local PORT: string? = process.env.PORT or 8080
+local LOG_LEVEL: string? = process.env.LOG_LEVEL
 
 local routes = {
 	[getThemes.route] = getThemes.callback,
@@ -17,8 +19,12 @@ local routes = {
 	end,
 }
 
+if LOG_LEVEL then
+	logging.setLogLevel(LOG_LEVEL)
+end
+
 net.serve(PORT, function(request)
-	print(`{request.method} {request.path}`)
+	logging.debug(`{request.method} {request.path}`)
 
 	for route, callback in routes do
 		if request.path == route then
@@ -29,8 +35,7 @@ net.serve(PORT, function(request)
 			if success then
 				return result
 			else
-				warn(`FAILED: {request.method} {request.path}`)
-				warn(`err: {result}`)
+				logging.warn(`FAILED: {request.method} {request.path}\n{result}`)
 
 				return {
 					status = 500,
@@ -45,4 +50,4 @@ net.serve(PORT, function(request)
 		body = "Not Found",
 	}
 end)
-print("Server started on port", PORT)
+logging.info("server started on port", PORT)
