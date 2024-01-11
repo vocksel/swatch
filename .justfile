@@ -9,7 +9,7 @@ plugins_dir := if os_family() == "unix" {
 	"$LOCALAPPDATA/Roblox/Plugins"
 }
 plugin_filename := project_name + ".rbxm"
-plugin_source := "plugin"
+plugin_source := "src"
 plugin_output := plugins_dir / plugin_filename
 tmpdir := `mktemp -d`
 
@@ -52,9 +52,6 @@ test: clean
 
 serve:
 	docker compose up
-
-serve-watch:
-	npx -y chokidar-cli 'server/**/*' -c "just serve" --initial
 
 analyze:
   curl -s -o "{{tmpdir}}/globalTypes.d.lua" -O https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/master/scripts/globalTypes.d.lua
