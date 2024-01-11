@@ -33,11 +33,13 @@ local function getThemeColors(theme): {
 
 			-- Ok, not there either. Does the theme have global colors?
 			if not color then
-				local global = Sift.Array.findWhere(theme.tokenColors, function(token)
+				local index = Sift.Array.findWhere(theme.tokenColors, function(token)
 					return token.scope == nil
 				end)
 
-				if global then
+				local global = theme.tokenColors[index]
+
+				if global and global.settings then
 					color = global.settings.foreground
 				end
 			end
