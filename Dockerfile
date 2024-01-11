@@ -4,37 +4,28 @@ FROM ubuntu:24.04
 
 LABEL description="Image for running the Lune server"
 
-ARG GITHUB_TOKEN
+EXPOSE 8080
 
-# Install tools for CI
+ARG LUNE_VERSION
+
 RUN apt-get update
 RUN apt-get install -y \
 	build-essential \
 	curl \
-	libssl-dev \
-	pkg-config \
 	unzip
 
-# Create user for use with Foreman tools
-RUN useradd -m github-actions
-USER github-actions
-ENV HOME /home/github-actions
-
-# Get Rust and add it to environment
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
-ENV PATH="${PATH}:$HOME/.cargo/bin"
-
-RUN cargo install just
-
-# Install Foreman and setup PATH for tool binaries
-RUN cargo install foreman
-ENV PATH="${PATH}:$HOME/.foreman/bin"
-RUN foreman github-auth ${GITHUB_TOKEN}
-RUN foreman install
-
-COPY . /server
+COPY ./server /server
 WORKDIR /server
 
-EXPOSE 8080
+# HACK: Need to install a forked Lune that binds servers to 0.0.0.0
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN apt-get install -y git gcc
+RUN git clone --single-branch --branch docker-server-binding https://github.com/ghostnaps/lune
+RUN cargo build --release --manifest-path lune/Cargo.toml
+CMD [ "./lune/target/release/lune", "server.luau" ]
 
-CMD [ "just", "serve" ]
+# RUN curl -LJO https://github.com/lune-org/lune/releases/download/v${LUNE_VERSION}/lune-${LUNE_VERSION}-linux-aarch64.zip
+# RUN unzip *.zip
+
+# CMD [ "./lune", "server.luau" ]

@@ -46,15 +46,12 @@ build-watch target="prod":
 build-here target="prod" filename=plugin_filename:
 	./bin/build.py --target {{target}} --output {{ filename }}
 
-docker-build:
-	docker build -t vscode-theme-importer-lua . --build-arg GITHUB_TOKEN=${GITHUB_TOKEN}
-
 test: clean
     rojo build tests.project.json -o {{tmpdir / "tests.rbxl"}}
     run-in-roblox --place {{tmpdir / "tests.rbxl"}} --script tests/init.server.lua
 
 serve:
-	lune server/server.luau
+	docker compose up
 
 serve-watch:
 	npx -y chokidar-cli 'server/**/*' -c "just serve" --initial
