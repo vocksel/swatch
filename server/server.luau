@@ -22,11 +22,16 @@ net.serve(PORT, function(request)
 
 	for route, callback in routes do
 		if request.path == route then
-			local success, result = pcall(callback, request)
+			local success, result = xpcall(function()
+				return callback(request)
+			end, debug.traceback)
 
 			if success then
 				return result
 			else
+				warn(`FAILED: {request.method} {request.path}`)
+				warn(`err: {result}`)
+
 				return {
 					status = 500,
 					body = result,

@@ -41,8 +41,16 @@ local function getThemes(request)
 							-- It would be great if a change could be added in
 							-- Lune for this, but worst case a JSON parser can
 							-- be installed and spun up as a separate process
-							local themeJson = serde.decode("json", fs.readFile(themeJsonPath))
-							table.insert(themes, themeJson)
+							local success, result = pcall(function()
+								return serde.decode("json", fs.readFile(themeJsonPath))
+							end)
+
+							if success then
+								table.insert(themes, result)
+							else
+								warn(`could not parse theme: {themeJsonPath}`)
+								warn(`err: {result}`)
+							end
 						end
 					end
 				end
