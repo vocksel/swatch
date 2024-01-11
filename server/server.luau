@@ -6,7 +6,6 @@ local getExtensions = require("./routes/getExtensions")
 local logging = require("./logging")
 
 local PORT: string? = process.env.PORT or 8080
-local LOG_LEVEL: string? = process.env.LOG_LEVEL
 
 local routes = {
 	[getThemes.route] = getThemes.callback,
@@ -18,10 +17,6 @@ local routes = {
 		}
 	end,
 }
-
-if LOG_LEVEL then
-	logging.setLogLevel(LOG_LEVEL)
-end
 
 net.serve(PORT, function(request)
 	logging.debug(`{request.method} {request.path}`)

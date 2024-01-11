@@ -16,16 +16,15 @@ local function getThemes(request)
 		}
 	end
 
-	local extensionPath = fetchExtension(publisherName, extensionName, extensionVersion)
+	logging.info(`fetching extension {extensionName} v{extensionVersion}...`)
 
-	logging.info("extensionPath", extensionPath)
+	local extensionPath = fetchExtension(publisherName, extensionName, extensionVersion)
 
 	if extensionPath then
 		local packageJsonPath = `{extensionPath}/extension/package.json`
 
 		if fs.isFile(packageJsonPath) then
 			local packageJson = serde.decode("json", fs.readFile(packageJsonPath))
-
 			local contributedThemes = if packageJson.contributes then packageJson.contributes.themes else nil
 
 			if contributedThemes then
@@ -35,9 +34,10 @@ local function getThemes(request)
 					if theme.path then
 						local partialThemePath = theme.path:gsub("%./", "")
 						local themeJsonPath = (`{extensionPath}/extension/{partialThemePath}`):gsub("//", "/")
-						logging.info("loading theme", themeJsonPath)
 
 						if fs.isFile(themeJsonPath) then
+							logging.info("loading theme", themeJsonPath)
+
 							-- FIXME: Both 'net.jsonDecode' and 'serde.decode'
 							-- can't handle JSON5, which means this will fail
 							-- for some themes that use it.
