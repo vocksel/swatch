@@ -10,8 +10,8 @@ parser.add_argument("--output", type=Path, required=True)
 parser.add_argument("--watch", action="store_true")
 
 TARGET_TO_PROJECT_FILE_MAP = {
-    "prod": Path("default.project.json"),
-    "dev": Path("dev.project.json"),
+    "prod": Path("plugin/default.project.json"),
+    "dev": Path("plugin/dev.project.json"),
 }
 
 
