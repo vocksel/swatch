@@ -37,6 +37,8 @@ local function applyTheme(theme: types.ExtensionTheme, studio: Studio): string?
 		end
 		return `{theme.name} was applied, but not all colors were set:\n{problemsStr}`
 	end
+
+	return nil
 end
 
 return applyTheme
