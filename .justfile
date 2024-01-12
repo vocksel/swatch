@@ -9,8 +9,10 @@ plugins_dir := if os_family() == "unix" {
 	"$LOCALAPPDATA/Roblox/Plugins"
 }
 plugin_filename := project_name + ".rbxm"
-plugin_source := "src"
+plugin_source := "plugin/src"
+server_source := "server/src"
 plugin_output := plugins_dir / plugin_filename
+plugin_project := "plugin/tests.project.json"
 tmpdir := `mktemp -d`
 
 default:
@@ -23,9 +25,13 @@ lint:
 	selene {{ plugin_source }}
 	stylua --check {{ plugin_source }}
 
+	selene {{ server_source }}
+	stylua --check {{ server_source }}
+
 _build target watch:
 	mkdir -p {{ parent_directory(plugin_output) }}
-	./bin/build.py --target {{target}} --output {{ plugin_output }} {{ if watch == "true"  { "--watch" } else { "" } }}
+	./bin/build.py --target {{ target }} --output {{ plugin_output }} \
+		{{ if watch == "true"  { "--watch" } else { "" } }}
 
 init:
 	foreman install
@@ -34,28 +40,28 @@ init:
 
 wally-install:
 	wally install
-	rojo sourcemap tests.project.json -o "{{tmpdir}}/sourcemap.json"
-	wally-package-types --sourcemap "{{tmpdir}}/sourcemap.json" Packages/
+	rojo sourcemap {{ plugin_project }} -o "{{ tmpdir }}/sourcemap.json"
+	wally-package-types --sourcemap "{{ tmpdir }}/sourcemap.json" Packages/
 
 build target="prod":
-	just _build {{target}} false
+	just _build {{ target }} false
 
 build-watch target="prod":
-	just _build {{target}} true
+	just _build {{ target }} true
 
 build-here target="prod" filename=plugin_filename:
-	./bin/build.py --target {{target}} --output {{ filename }}
+	./bin/build.py --target {{ target }} --output {{ filename }}
 
 test: clean
-    rojo build tests.project.json -o {{tmpdir / "tests.rbxl"}}
-    run-in-roblox --place {{tmpdir / "tests.rbxl"}} --script tests/init.server.lua
+    rojo build {{ plugin_project }} -o {{ tmpdir / "tests.rbxl" }}
+    run-in-roblox --place {{ tmpdir / "tests.rbxl" }} --script tests/init.server.lua
 
 serve:
 	docker compose up
 
 analyze:
-  curl -s -o "{{tmpdir}}/globalTypes.d.lua" -O https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/master/scripts/globalTypes.d.lua
+  curl -s -o "{{ tmpdir }}/globalTypes.d.lua" -O https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/master/scripts/globalTypes.d.lua
 
-  rojo sourcemap tests.project.json -o "{{tmpdir}}/sourcemap.json"
+  rojo sourcemap {{ plugin_project }} -o "{{ tmpdir }}/sourcemap.json"
 
-  luau-lsp analyze --sourcemap="{{tmpdir}}/sourcemap.json" --defs="{{tmpdir}}/globalTypes.d.lua" --defs=testez.d.lua --ignore=**/_Index/** {{ plugin_source }}
+  luau-lsp analyze --sourcemap="{{ tmpdir }}/sourcemap.json" --defs="{{ tmpdir }}/globalTypes.d.lua" --defs=testez.d.lua --ignore=**/_Index/** {{ plugin_source }}

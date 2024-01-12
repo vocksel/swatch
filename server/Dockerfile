@@ -14,7 +14,7 @@ RUN apt-get install -y \
 	curl \
 	unzip
 
-COPY ./server /server
+COPY ./src /server
 WORKDIR /server
 
 # HACK: Need to install a forked Lune that binds servers to 0.0.0.0

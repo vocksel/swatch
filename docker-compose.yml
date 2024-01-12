@@ -3,7 +3,7 @@ services:
   lune-server:
     container_name: lune-server
     build:
-      dockerfile: Dockerfile
+      dockerfile: server/Dockerfile
       args:
         - LUNE_VERSION=0.7.11
     ports:
