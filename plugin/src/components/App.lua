@@ -1,53 +1,55 @@
 local Root = script:FindFirstAncestor("rbxtheme")
 
 local React = require(Root.Packages.React)
-local fetchVisualStudioExtensions = require(Root.fetchVisualStudioExtensions)
+local Sift = require(Root.Packages.Sift)
+local types = require(Root.types)
+local Home = require(Root.Components.Home)
+local ThemeDetails = require(Root.Components.ThemeDetails)
 
-type VsMarketplaceExtension = fetchVisualStudioExtensions.VsMarketplaceExtension
-
-local useEffect = React.useState
+local useCallback = React.useCallback
 local useState = React.useState
+
+type PublishedExtension = types.PublishedExtension
+type ExtensionTheme = types.ExtensionTheme
+
+export type View = "Home" | "ThemeDetails"
 
 export type Props = {
 	plugin: Plugin,
 }
 
 local function App(_props: Props)
-	local extensions, setExtensions = useState({} :: { VsMarketplaceExtension })
+	local view, setView = useState("Home" :: View)
+	local viewParams, setViewParams = useState({})
 
-	useEffect(function()
-		fetchVisualStudioExtensions({
-			searchTerm = "theme",
-		}):andThen(function(newExtensions)
-			print("extensions", newExtensions)
-			setExtensions(newExtensions)
-		end)
+	local onBack = useCallback(function()
+		setViewParams({})
+		setView("Home")
 	end, {})
 
-	return React.createElement("Frame", {
-		Size = UDim2.fromScale(1, 1),
-		BackgroundTransparency = 1,
-	}, {
-		Layout = React.createElement("UIListLayout", {
-			SortOrder = Enum.SortOrder.LayoutOrder,
-		}),
+	local onViewExtension = useCallback(function(extension: PublishedExtension, themes: { ExtensionTheme })
+		setViewParams({
+			extension = extension,
+			themes = themes,
+		})
+		setView("ThemeDetails")
+	end, {})
 
-		SearchForm = React.createElement("Frame", {
-			LayoutOrder = 1,
-			Size = UDim2.fromScale(1, 1),
-			BackgroundTransparency = 1,
-		}, {
-			Input = React.createElement("TextBox", {
-				PlaceholderText = "Search themes...",
-			}),
+	return React.createElement("Folder", nil, {
+		Home = if view == "Home"
+			then React.createElement(Home, {
+				onViewExtension = onViewExtension,
+			})
+			else nil,
 
-			ErrorMessage = React.createElement("TextLabel", {}),
-		}),
-
-		Extensions = React.createElement("TextLabel", {
-			LayoutOrder = 2,
-			Text = tostring(extensions),
-		}),
+		ThemeDetails = if view == "ThemeDetails"
+			then React.createElement(
+				ThemeDetails,
+				Sift.Dictionary.join(viewParams, {
+					onBack = onBack,
+				})
+			)
+			else nil,
 	})
 end
 
