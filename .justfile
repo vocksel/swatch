@@ -23,6 +23,11 @@ lint:
 	selene {{ plugin_source }}
 	stylua --check {{ plugin_source }}
 
+
+_build target watch:
+	mkdir -p {{ parent_directory(plugin_output) }}
+	./bin/build.py --target {{target}} --output {{ plugin_output }} {{ if watch == "true"  { "--watch" } else { "" } }}
+
 init:
 	foreman install
 	lune --setup
@@ -33,18 +38,13 @@ wally-install:
 	rojo sourcemap tests.project.json -o "{{tmpdir}}/sourcemap.json"
 	wally-package-types --sourcemap "{{tmpdir}}/sourcemap.json" Packages/
 
-
-_build target watch:
-	mkdir -p {{ parent_directory(plugin_output) }}
-	./bin/build.py --target {{target}} --output {{ plugin_output }} {{ if watch == "true"  { "--watch" } else { "" } }}
-
 build target="prod":
 	just _build {{target}} false
 
 build-watch target="prod":
 	just _build {{target}} true
 
-build-here target="prod" filename=plugin_filename: _init
+build-here target="prod" filename=plugin_filename:
 	./bin/build.py --target {{target}} --output {{ filename }}
 
 test: clean
