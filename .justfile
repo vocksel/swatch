@@ -38,6 +38,9 @@ lint:
 	selene {{ server_source }}
 	stylua --check {{ server_source }}
 
+_get-plugin-name:
+	jq -r .name {{ plugin_root / "default.project.json" }}
+
 _build target output watch:
 	-mkdir -p {{ parent_directory(output) }}
 	./bin/build.py --target {{ target }} --project-path {{ plugin_root }} --output {{ output }} \

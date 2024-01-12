@@ -24,7 +24,7 @@ jobs:
 
       - name: Get model file name
         run: |
-          name=$(jq -r .name default.project.json)
+          name=$(just _get-plugin-name)
           echo "MODEL_FILE=$name.rbxm" >> $GITHUB_ENV
 
       - name: Build
