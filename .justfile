@@ -9,7 +9,8 @@ plugins_dir := if os_family() == "unix" {
 	"$LOCALAPPDATA/Roblox/Plugins"
 }
 plugin_filename := project_name + ".rbxm"
-plugin_source := "src"
+plugin_source := "plugin/src"
+server_source := "server/src"
 plugin_output := plugins_dir / plugin_filename
 tmpdir := `mktemp -d`
 
@@ -23,9 +24,13 @@ lint:
 	selene {{ plugin_source }}
 	stylua --check {{ plugin_source }}
 
+	selene {{ server_source }}
+	stylua --check {{ server_source }}
+
 _build target watch:
 	mkdir -p {{ parent_directory(plugin_output) }}
-	./bin/build.py --target {{target}} --output {{ plugin_output }} {{ if watch == "true"  { "--watch" } else { "" } }}
+	./bin/build.py --target {{ target }} --output {{ plugin_output }} \
+		{{ if watch == "true"  { "--watch" } else { "" } }}
 
 init:
 	foreman install
