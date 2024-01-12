@@ -27,6 +27,8 @@ jobs:
           sha=${GITHUB_SHA:0:7}
           echo "MODEL_FILE=$name-$sha.rbxm" >> $GITHUB_ENV
 
+      - run: just init
+
       - name: Build
         run: just build-here prod ${{ env.MODEL_NAME }}
 
@@ -45,6 +47,8 @@ jobs:
       - uses: Roblox/setup-foreman@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: just init
 
       - name: Run Luau analysis
         run: just analyze
