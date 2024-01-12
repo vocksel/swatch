@@ -4,10 +4,7 @@
     "$className": "DataModel",
     "ServerScriptService": {
       "rbxtheme": {
-        "Packages": {
-          "$path": "Packages"
-        },
-        "$path": "src"
+        "$path": "default.project.json"
       }
     }
   }
