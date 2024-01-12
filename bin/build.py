@@ -22,8 +22,6 @@ def main():
     if args.project_path:
         project_file = args.project_path / project_file
 
-    print(project_file)
-
     command = ["rojo", "build", project_file, "-o", args.output]
     if args.watch:
         print("Watching for changes...")

@@ -182,4 +182,17 @@ export type ExtensionQueryResult = {
 	results: { ExtensionFilterResult },
 }
 
+type TokenColor = {
+	scope: { string },
+	settings: { [string]: string },
+}
+
+export type ExtensionTheme = {
+	colors: { [string]: string },
+	name: string,
+	tokenColors: { TokenColor },
+	semanticHighlighting: boolean?,
+	type: string?,
+}
+
 return nil
