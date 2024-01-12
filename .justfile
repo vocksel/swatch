@@ -23,10 +23,9 @@ lint:
 	selene {{ plugin_source }}
 	stylua --check {{ plugin_source }}
 
-
-_build target watch:
-	mkdir -p {{ parent_directory(plugin_output) }}
-	./bin/build.py --target {{target}} --output {{ plugin_output }} {{ if watch == "true"  { "--watch" } else { "" } }}
+_build target output watch:
+	-mkdir -p {{ parent_directory(output) }}
+	./bin/build.py --target {{target}} --output {{ output }} {{ if watch == "true"  { "--watch" } else { "" } }}
 
 init:
 	foreman install
@@ -39,13 +38,13 @@ wally-install:
 	wally-package-types --sourcemap "{{tmpdir}}/sourcemap.json" Packages/
 
 build target="prod":
-	just _build {{target}} false
+	just _build {{ target }} {{ plugin_output }} false
 
 build-watch target="prod":
-	just _build {{target}} true
+	just _build {{ target }} {{ plugin_output }} true
 
 build-here target="prod" filename=plugin_filename:
-	./bin/build.py --target {{target}} --output {{ filename }}
+	just _build {{ target }} {{ filename }} false
 
 test: clean
     rojo build tests.project.json -o {{tmpdir / "tests.rbxl"}}
