@@ -1,6 +1,8 @@
 return {
 	PLUGIN_NAME = "VSCode Theme Importer",
 
+	SERVER_URL = "http://localhost:8080",
+
 	--[[
 		This object maps Roblox Studio script editor colors to an array of
 		VSCode's base colors, as well as token colors.
