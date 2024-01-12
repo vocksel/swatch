@@ -6,16 +6,16 @@ extensions
 .env
 
 # Rojo
-/*.rbxl*
-/*.rbxm*
+*.rbxl*
+*.rbxm*
 
 # Luau
 sourcemap.json
 
 # Wally
-/DevPackages
-/Packages
-/wally.lock
+DevPackages
+Packages
+wally.lock
 
 # Other
 /*.log

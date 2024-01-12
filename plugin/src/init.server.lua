@@ -42,7 +42,7 @@ do
 	print("Established connection to server")
 
 	local success, themes = fetchVisualStudioExtensions({ searchTerm = "synthwave" })
-		:andThen(function(extensions: { types.Extension })
+		:andThen(function(extensions: { types.PublishedExtension })
 			local extension = extensions[1]
 			local latestVersion = extension.versions[1]
 
