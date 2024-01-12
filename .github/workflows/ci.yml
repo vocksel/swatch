@@ -23,7 +23,7 @@ jobs:
 
       - name: Get model file name
         run: |
-          name=$(jq -r .name default.project.json)
+          name=$(just _get-plugin-name)
           sha=${GITHUB_SHA:0:7}
           echo "MODEL_FILE=$name-$sha.rbxm" >> $GITHUB_ENV
 
