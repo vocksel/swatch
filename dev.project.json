@@ -1,9 +1,6 @@
 {
   "name": "rbxtheme",
   "tree": {
-    "Packages": {
-      "$path": "Packages"
-    },
-    "$path": "src"
+    "$path": "default.project.json"
   }
 }
