@@ -1,6 +1,6 @@
 {
   "name": "rbxtheme",
   "tree": {
-    "$path": "default.project.json"
+    "$path": "build"
   }
 }
