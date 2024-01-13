@@ -1,7 +1,5 @@
-local Root = script:FindFirstAncestor("rbxtheme")
-
-local getThemeColors = require(Root.getThemeColors)
-local types = require(Root.types)
+local getThemeColors = require("@root/getThemeColors")
+local types = require("@root/types")
 
 local function applyTheme(theme: types.ExtensionTheme, studio: Studio): string?
 	local colors = getThemeColors(theme)

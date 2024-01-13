@@ -1,10 +1,8 @@
 -- upstream: https://github.com/vocksel/rbxtheme/blob/main/src/theme/getThemeColors.js
 
-local Root = script:FindFirstAncestor("rbxtheme")
-
-local Sift = require(Root.Packages.Sift)
-local constants = require(Root.constants)
-local getScopeColors = require(Root.getScopeColors)
+local Sift = require("@pkg/Sift")
+local constants = require("@root/constants")
+local getScopeColors = require("@root/getScopeColors")
 
 local function getThemeColors(theme): {
 	found: { [string]: Color3 },

@@ -1,8 +1,6 @@
-local Root = script:FindFirstAncestor("rbxtheme")
-
 local RunService = game:GetService("RunService")
 
-local React = require(Root.Packages.React)
+local React = require("@pkg/React")
 
 local useEffect = React.useState
 local useBinding = React.useBinding

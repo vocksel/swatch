@@ -1,10 +1,8 @@
-local Root = script:FindFirstAncestor("rbxtheme")
-
-local React = require(Root.Packages.React)
-local Sift = require(Root.Packages.Sift)
-local types = require(Root.types)
-local Home = require(Root.Components.Home)
-local ThemeDetails = require(Root.Components.ThemeDetails)
+local React = require("@pkg/React")
+local Sift = require("@pkg/Sift")
+local types = require("@root/types")
+local Home = require("./Home")
+local ThemeDetails = require("./ThemeDetails")
 
 local useCallback = React.useCallback
 local useState = React.useState

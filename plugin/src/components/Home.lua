@@ -1,12 +1,10 @@
-local Root = script:FindFirstAncestor("rbxtheme")
-
-local React = require(Root.Packages.React)
-local fetchVisualStudioExtensions = require(Root.fetchVisualStudioExtensions)
-local fetchExtensionThemes = require(Root.fetchExtensionThemes)
-local types = require(Root.types)
-local LoadingSpinner = require(Root.Components.LoadingSpinner)
-local ExtensionsList = require(Root.Components.ExtensionsList)
-local getLayoutOrder = require(Root.Components.getLayoutOrder)
+local React = require("@pkg/React")
+local fetchVisualStudioExtensions = require("@root/fetchVisualStudioExtensions")
+local fetchExtensionThemes = require("@root/fetchExtensionThemes")
+local types = require("@root/types")
+local LoadingSpinner = require("./LoadingSpinner")
+local ExtensionsList = require("./ExtensionsList")
+local getLayoutOrder = require("./getLayoutOrder")
 
 type PublishedExtension = types.PublishedExtension
 type ExtensionTheme = types.ExtensionTheme
@@ -18,7 +16,7 @@ local useState = React.useState
 local PADDING = UDim.new(0, 8)
 
 export type Props = {
-	onViewExtension: (extension: PublishedExtension, themes: { Theme }) -> (),
+	onViewExtension: (extension: PublishedExtension, themes: { ExtensionTheme }) -> (),
 }
 
 local function Home(props: Props)

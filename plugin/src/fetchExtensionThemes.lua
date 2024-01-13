@@ -1,11 +1,9 @@
-local Root = script:FindFirstAncestor("rbxtheme")
-
 local HttpService = game:GetService("HttpService")
 
-local createUrl = require(Root.createUrl)
-local request = require(Root.request)
-local types = require(Root.types)
-local urls = require(Root.urls)
+local createUrl = require("@root/createUrl")
+local request = require("@root/request")
+local types = require("@root/types")
+local urls = require("@root/urls")
 
 local function fetchExtensionThemes(extension: types.PublishedExtension, version: string)
 	return request({

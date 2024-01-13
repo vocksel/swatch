@@ -1,7 +1,7 @@
-local React = require(script.Packages.React)
-local ReactRoblox = require(script.Packages.ReactRoblox)
-local constants = require(script.constants)
-local App = require(script.Components.App)
+local React = require("@pkg/React")
+local ReactRoblox = require("@pkg/ReactRoblox")
+local constants = require("./constants")
+local App = require("./Components/App")
 
 local info = DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, false, false, 400, 400, 100, 100)
 local widget = plugin:CreateDockWidgetPluginGui(constants.PLUGIN_NAME, info)

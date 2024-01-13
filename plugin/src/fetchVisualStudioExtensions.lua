@@ -1,10 +1,8 @@
-local Root = script:FindFirstAncestor("rbxtheme")
-
 local HttpService = game:GetService("HttpService")
 
-local request = require(Root.request)
-local urls = require(Root.urls)
-local createUrl = require(Root.createUrl)
+local request = require("@root/request")
+local urls = require("@root/urls")
+local createUrl = require("@root/createUrl")
 
 local function fetchVisualStudioExtensions(query: { [string]: any }?)
 	return request({
