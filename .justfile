@@ -49,9 +49,8 @@ _build target output:
 	-mkdir -p {{ plugin_build }}
 
 	rojo sourcemap {{ plugin_project }} -o {{ plugin_root / "sourcemap.json" }}
-
-	cp -pR {{ plugin_root / "Packages" }} {{ plugin_build / "Packages" }}
-	darklua process {{ plugin_source }} {{ plugin_build }} --config {{ plugin_root / ".darklua.json" }}
+	darklua process {{ plugin_source }} {{ plugin_build }} \
+		--config {{ plugin_root / ".darklua.json" }}
 
 	{{ if target == "prod" { `just _prune` } else { `` } }}
 
