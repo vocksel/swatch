@@ -25,6 +25,7 @@ local function Home(props: Props)
 	local isLoading, setIsLoading = useState(true)
 	local extensions, setExtensions = useState({} :: { PublishedExtension })
 	local searchTerm, setSearchTerm = useState("")
+	local err, setErr = useState(nil :: string?)
 
 	local onView = useCallback(function(extension: PublishedExtension)
 		local latestVersion = extension.versions[1]
@@ -49,6 +50,7 @@ local function Home(props: Props)
 	end, {})
 
 	useEffect(function()
+		setErr(nil)
 		setIsLoading(true)
 		fetchVisualStudioExtensions({
 				-- page = page, -- TODO: Increment the page when scrolling to the bottom of the list
@@ -57,6 +59,9 @@ local function Home(props: Props)
 			})
 			:andThen(function(newExtensions)
 				setExtensions(newExtensions)
+			end)
+			:catch(function()
+				setErr(`No extensions found. Please try again later`)
 			end)
 			:finally(function()
 				setIsLoading(false)
@@ -108,6 +113,21 @@ local function Home(props: Props)
 				}),
 			}),
 		}),
+
+		ErrorMessage = if err
+			then React.createElement("TextLabel", {
+				LayoutOrder = getLayoutOrder(),
+				AutomaticSize = Enum.AutomaticSize.XY,
+				BackgroundTransparency = 1,
+				Text = err,
+				TextSize = 16,
+				Font = Enum.Font.GothamMedium,
+				TextXAlignment = Enum.TextXAlignment.Left,
+				TextYAlignment = Enum.TextYAlignment.Top,
+				TextColor3 = Color3.fromRGB(255, 255, 255),
+				TextTruncate = Enum.TextTruncate.AtEnd,
+			})
+			else nil,
 
 		ExtensionsListWrapper = React.createElement(
 			"Frame",
