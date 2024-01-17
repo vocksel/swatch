@@ -1,10 +1,9 @@
 local Root = script:FindFirstAncestor("Swatch")
 
 local React = require(Root.Packages.React)
-local Sift = require(Root.Packages.Sift)
 local types = require(Root.types)
 local Home = require(Root.Components.Home)
-local ThemeDetails = require(Root.Components.ThemeDetails)
+local ThemeDetailsWrapper = require(Root.Components.ThemeDetailsWrapper)
 
 local useCallback = React.useCallback
 local useState = React.useState
@@ -20,18 +19,15 @@ export type Props = {
 
 local function App(_props: Props)
 	local view, setView = useState("Home" :: View)
-	local viewParams, setViewParams = useState({})
+	local extension, setExtension = useState(nil :: PublishedExtension?)
 
 	local onBack = useCallback(function()
-		setViewParams({})
+		setExtension(nil)
 		setView("Home")
 	end, {})
 
-	local onViewExtension = useCallback(function(extension: PublishedExtension, themes: { ExtensionTheme })
-		setViewParams({
-			extension = extension,
-			themes = themes,
-		})
+	local onViewExtension = useCallback(function(selectedExtension: PublishedExtension)
+		setExtension(selectedExtension)
 		setView("ThemeDetails")
 	end, {})
 
@@ -43,12 +39,10 @@ local function App(_props: Props)
 			else nil,
 
 		ThemeDetails = if view == "ThemeDetails"
-			then React.createElement(
-				ThemeDetails,
-				Sift.Dictionary.join(viewParams, {
-					onBack = onBack,
-				})
-			)
+			then React.createElement(ThemeDetailsWrapper, {
+				extension = extension,
+				onBack = onBack,
+			})
 			else nil,
 	})
 end
