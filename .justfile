@@ -61,6 +61,7 @@ _build target output:
 
 init:
 	foreman install
+	lune --setup
 	just wally-install
 
 wally-install:
