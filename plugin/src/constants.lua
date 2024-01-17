@@ -1,7 +1,7 @@
 return {
 	PLUGIN_NAME = "Swatch",
 
-	SERVER_URL = "http://localhost:8080",
+	SERVER_URL = "https://swatch.vocksel.com",
 
 	--[[
 		This object maps Roblox Studio script editor colors to an array of
