@@ -3,9 +3,9 @@ local Root = script:FindFirstAncestor("rbxtheme")
 local HttpService = game:GetService("HttpService")
 
 local createUrl = require(Root.createUrl)
+local constants = require(Root.constants)
 local request = require(Root.request)
 local types = require(Root.types)
-local constants = require(Root.constants)
 
 local function fetchExtensionThemes(extension: types.PublishedExtension, version: string)
 	return request({
