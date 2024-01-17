@@ -1,4 +1,4 @@
--- upstream: https://github.com/vocksel/rbxtheme/blob/main/src/theme/getThemeColors.js
+-- upstream: https://github.com/vocksel/Swatch/blob/main/src/theme/getThemeColors.js
 
 local Sift = require("@pkg/Sift")
 local constants = require("@root/constants")

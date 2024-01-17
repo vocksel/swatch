@@ -1,6 +1,5 @@
 local React = require("@pkg/React")
 local fetchVisualStudioExtensions = require("@root/fetchVisualStudioExtensions")
-local fetchExtensionThemes = require("@root/fetchExtensionThemes")
 local types = require("@root/types")
 local LoadingSpinner = require("./LoadingSpinner")
 local ExtensionsList = require("./ExtensionsList")
@@ -16,29 +15,14 @@ local useState = React.useState
 local PADDING = UDim.new(0, 8)
 
 export type Props = {
-	onViewExtension: (extension: PublishedExtension, themes: { ExtensionTheme }) -> (),
+	onViewExtension: (extension: PublishedExtension) -> (),
 }
 
 local function Home(props: Props)
 	local isLoading, setIsLoading = useState(true)
 	local extensions, setExtensions = useState({} :: { PublishedExtension })
 	local searchTerm, setSearchTerm = useState("")
-
-	local onView = useCallback(function(extension: PublishedExtension)
-		local latestVersion = extension.versions[1]
-
-		if latestVersion then
-			fetchExtensionThemes(extension, latestVersion.version)
-				:andThen(function(themes)
-					props.onViewExtension(extension, themes)
-				end)
-				:catch(function(err)
-					warn("ERR:", err)
-				end)
-		else
-			warn("No latest version found for extension {extension.displayName}")
-		end
-	end, {})
+	local err, setErr = useState(nil :: string?)
 
 	local onSearch = useCallback(function(rbx: TextBox, enterPressed: boolean)
 		if enterPressed then
@@ -47,6 +31,7 @@ local function Home(props: Props)
 	end, {})
 
 	useEffect(function()
+		setErr(nil)
 		setIsLoading(true)
 		fetchVisualStudioExtensions({
 				-- page = page, -- TODO: Increment the page when scrolling to the bottom of the list
@@ -55,6 +40,9 @@ local function Home(props: Props)
 			})
 			:andThen(function(newExtensions)
 				setExtensions(newExtensions)
+			end)
+			:catch(function()
+				setErr(`No extensions found. Please try again later`)
 			end)
 			:finally(function()
 				setIsLoading(false)
@@ -107,6 +95,21 @@ local function Home(props: Props)
 			}),
 		}),
 
+		ErrorMessage = if err
+			then React.createElement("TextLabel", {
+				LayoutOrder = getLayoutOrder(),
+				AutomaticSize = Enum.AutomaticSize.XY,
+				BackgroundTransparency = 1,
+				Text = err,
+				TextSize = 16,
+				Font = Enum.Font.GothamMedium,
+				TextXAlignment = Enum.TextXAlignment.Left,
+				TextYAlignment = Enum.TextYAlignment.Top,
+				TextColor3 = Color3.fromRGB(255, 255, 255),
+				TextTruncate = Enum.TextTruncate.AtEnd,
+			})
+			else nil,
+
 		ExtensionsListWrapper = React.createElement(
 			"Frame",
 			{
@@ -128,7 +131,7 @@ local function Home(props: Props)
 					ExtensionList = if not isLoading
 						then React.createElement(ExtensionsList, {
 							extensions = extensions,
-							onView = onView,
+							onView = props.onViewExtension,
 						})
 						else nil,
 				}

@@ -1,6 +1,8 @@
 #!/usr/bin/env just --justfile
 
-project_name := "rbxtheme"
+set dotenv-load
+
+project_name := "Swatch"
 plugins_dir := if os_family() == "unix" {
 	"$HOME/Documents/Roblox/Plugins"
 } else {
@@ -81,7 +83,7 @@ test: clean
     run-in-roblox --place {{ tmpdir / "tests.rbxl" }} --script tests/init.server.lua
 
 serve:
-	docker compose up
+	cd server && docker compose up
 
 plugin-analyze:
 	curl -s -o {{ global_defs_path }} \
