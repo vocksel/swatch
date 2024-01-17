@@ -1,5 +1,5 @@
 return {
-	PLUGIN_NAME = "VSCode Theme Importer",
+	PLUGIN_NAME = "Swatch",
 
 	--[[
 		This object maps Roblox Studio script editor colors to an array of
