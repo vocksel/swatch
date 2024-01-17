@@ -1,5 +1,5 @@
 return {
-	PLUGIN_NAME = "VSCode Theme Importer",
+	PLUGIN_NAME = "Swatch",
 
 	SERVER_URL = "https://swatch.vocksel.com",
 

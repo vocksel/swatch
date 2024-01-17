@@ -1,4 +1,4 @@
-local Root = script:FindFirstAncestor("rbxtheme")
+local Root = script:FindFirstAncestor("Swatch")
 
 local getThemeColors = require(Root.getThemeColors)
 local types = require(Root.types)
