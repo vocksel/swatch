@@ -1,9 +1,9 @@
 {
-  "name": "rbxtheme",
+  "name": "Swatch",
   "tree": {
     "$className": "DataModel",
     "ServerScriptService": {
-      "rbxtheme": {
+      "Swatch": {
         "$path": "default.project.json"
       }
     }

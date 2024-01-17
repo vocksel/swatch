@@ -1,4 +1,4 @@
-local Root = script:FindFirstAncestor("rbxtheme")
+local Root = script:FindFirstAncestor("Swatch")
 
 local React = require(Root.Packages.React)
 local Sift = require(Root.Packages.Sift)

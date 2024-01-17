@@ -1,6 +1,6 @@
--- upstream: https://github.com/vocksel/rbxtheme/blob/main/src/theme/getThemeColors.js
+-- upstream: https://github.com/vocksel/Swatch/blob/main/src/theme/getThemeColors.js
 
-local Root = script:FindFirstAncestor("rbxtheme")
+local Root = script:FindFirstAncestor("Swatch")
 
 local Sift = require(Root.Packages.Sift)
 local constants = require(Root.constants)
