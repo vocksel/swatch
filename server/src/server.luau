@@ -5,7 +5,7 @@ local getThemes = require("./routes/getThemes")
 local getExtensions = require("./routes/getExtensions")
 local logging = require("./logging")
 
-local PORT: string? = process.env.PORT or 8080
+local PORT = tonumber(process.env.PORT) or 8080
 
 local routes = {
 	[getThemes.route] = getThemes.callback,
@@ -18,31 +18,34 @@ local routes = {
 	end,
 }
 
-net.serve(PORT, function(request)
-	logging.debug(`{request.method} {request.path}`)
+net.serve(PORT, {
+	address = "http://0.0.0.0",
+	handleRequest = function(request)
+		logging.debug(`{request.method} {request.path}`)
 
-	for route, callback in routes do
-		if request.path == route then
-			local success, result = xpcall(function()
-				return callback(request)
-			end, debug.traceback)
+		for route, callback in routes do
+			if request.path == route then
+				local success, result = xpcall(function()
+					return callback(request)
+				end, debug.traceback)
 
-			if success then
-				return result
-			else
-				logging.warn(`FAILED: {request.method} {request.path}\n{result}`)
+				if success then
+					return result
+				else
+					logging.warn(`FAILED: {request.method} {request.path}\n{result}`)
 
-				return {
-					status = 500,
-					body = result,
-				}
+					return {
+						status = 500,
+						body = result,
+					}
+				end
 			end
 		end
-	end
 
-	return {
-		status = 404,
-		body = "Not Found",
-	}
-end)
+		return {
+			status = 404,
+			body = "Not Found",
+		}
+	end,
+})
 logging.info("server started on port", PORT)

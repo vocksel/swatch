@@ -70,7 +70,7 @@ test: clean
     run-in-roblox --place {{ tmpdir / "tests.rbxl" }} --script tests/init.server.lua
 
 serve:
-	docker compose up
+	cd server && docker compose up
 
 plugin-analyze:
 	curl -s -o {{ global_defs_path }} \
