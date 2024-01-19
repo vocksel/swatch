@@ -1,8 +1,6 @@
 -- upstream: https://github.com/vocksel/Swatch/blob/main/src/theme/getScopeColors.js
 
-local Root = script:FindFirstAncestor("Swatch")
-
-local Sift = require(Root.Packages.Sift)
+local Sift = require("@pkg/Sift")
 
 local function getScopeColors(theme): { [string]: string }
 	local colors = {}

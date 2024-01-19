@@ -1,9 +1,6 @@
-local Root = script:FindFirstAncestor("Swatch")
-
-local React = require(Root.Packages.React)
-local Sift = require(Root.Packages.Sift)
-
-local useClock = require(Root.Components.useClock)
+local React = require("@pkg/React")
+local Sift = require("@pkg/Sift")
+local useClock = require("./useClock")
 
 export type Props = {
 	speed: number?,

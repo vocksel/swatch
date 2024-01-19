@@ -1,4 +1,5 @@
 [tools]
+darklua = { source = "seaofvoices/darklua", version = "0.12.1" }
 luau-lsp = { source = "JohnnyMorganz/luau-lsp", version = "1.x" }
 lune = { source = "lune-org/lune", version = "0.7.11" }
 rojo = { source = "rojo-rbx/rojo", version = "7.2.1" }

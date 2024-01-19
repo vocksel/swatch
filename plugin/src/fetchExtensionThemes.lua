@@ -1,11 +1,9 @@
-local Root = script:FindFirstAncestor("Swatch")
-
 local HttpService = game:GetService("HttpService")
 
-local createUrl = require(Root.createUrl)
-local constants = require(Root.constants)
-local request = require(Root.request)
-local types = require(Root.types)
+local createUrl = require("@root/createUrl")
+local constants = require("@root/constants")
+local request = require("@root/request")
+local types = require("@root/types")
 
 local function fetchExtensionThemes(extension: types.PublishedExtension, version: string)
 	return request({

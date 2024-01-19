@@ -1,10 +1,8 @@
-local Root = script:FindFirstAncestor("Swatch")
-
 local HttpService = game:GetService("HttpService")
 
-local request = require(Root.request)
-local constants = require(Root.constants)
-local createUrl = require(Root.createUrl)
+local request = require("@root/request")
+local constants = require("@root/constants")
+local createUrl = require("@root/createUrl")
 
 local function fetchVisualStudioExtensions(query: { [string]: any }?)
 	return request({

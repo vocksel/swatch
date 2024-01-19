@@ -1,10 +1,8 @@
-local Root = script:FindFirstAncestor("Swatch")
-
-local React = require(Root.Packages.React)
-local Sift = require(Root.Packages.Sift)
-local types = require(Root.types)
-local applyTheme = require(Root.applyTheme)
-local getLayoutOrder = require(Root.Components.getLayoutOrder)
+local React = require("@pkg/React")
+local Sift = require("@pkg/Sift")
+local types = require("@root/types")
+local applyTheme = require("@root/applyTheme")
+local getLayoutOrder = require("./getLayoutOrder")
 
 local useCallback = React.useCallback
 

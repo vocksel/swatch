@@ -1,9 +1,7 @@
-local Root = script:FindFirstAncestor("Swatch")
-
-local React = require(Root.Packages.React)
-local types = require(Root.types)
-local Home = require(Root.Components.Home)
-local ThemeDetailsWrapper = require(Root.Components.ThemeDetailsWrapper)
+local React = require("@pkg/React")
+local types = require("@root/types")
+local Home = require("./Home")
+local ThemeDetailsWrapper = require("./ThemeDetailsWrapper")
 
 local useCallback = React.useCallback
 local useState = React.useState

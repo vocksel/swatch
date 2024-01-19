@@ -1,8 +1,6 @@
-local Root = script:FindFirstAncestor("Swatch")
-
-local React = require(Root.Packages.React)
-local types = require(Root.types)
-local getLayoutOrder = require(Root.Components.getLayoutOrder)
+local React = require("@pkg/React")
+local types = require("@root/types")
+local getLayoutOrder = require("./getLayoutOrder")
 
 type PublishedExtension = types.PublishedExtension
 

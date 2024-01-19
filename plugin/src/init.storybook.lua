@@ -1,7 +1,5 @@
-local Root = script:FindFirstAncestor("Swatch")
-
-local React = require(Root.Packages.React)
-local ReactRoblox = require(Root.Packages.ReactRoblox)
+local React = require("@pkg/React")
+local ReactRoblox = require("@pkg/ReactRoblox")
 
 return {
 	storyRoots = {

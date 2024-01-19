@@ -1,9 +1,7 @@
-local Root = script:FindFirstAncestor("Swatch")
-
 local HttpService = game:GetService("HttpService")
 
-local Promise = require(Root.Packages.Promise)
-local Sift = require(Root.Packages.Sift)
+local Promise = require("@pkg/Promise")
+local Sift = require("@pkg/Sift")
 
 type HttpMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE"
 

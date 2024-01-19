@@ -189,10 +189,12 @@ type TokenColor = {
 
 export type ExtensionTheme = {
 	colors: { [string]: string },
-	name: string,
 	tokenColors: { TokenColor },
+
+	name: string?,
+	uuid: string?,
 	semanticHighlighting: boolean?,
 	type: string?,
 }
 
-return nil
+return {}

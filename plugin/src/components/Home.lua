@@ -1,11 +1,9 @@
-local Root = script:FindFirstAncestor("Swatch")
-
-local React = require(Root.Packages.React)
-local fetchVisualStudioExtensions = require(Root.fetchVisualStudioExtensions)
-local types = require(Root.types)
-local LoadingSpinner = require(Root.Components.LoadingSpinner)
-local ExtensionsList = require(Root.Components.ExtensionsList)
-local getLayoutOrder = require(Root.Components.getLayoutOrder)
+local React = require("@pkg/React")
+local fetchVisualStudioExtensions = require("@root/fetchVisualStudioExtensions")
+local types = require("@root/types")
+local LoadingSpinner = require("./LoadingSpinner")
+local ExtensionsList = require("./ExtensionsList")
+local getLayoutOrder = require("./getLayoutOrder")
 
 type PublishedExtension = types.PublishedExtension
 type ExtensionTheme = types.ExtensionTheme
