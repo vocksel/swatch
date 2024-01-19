@@ -1,4 +1,4 @@
--- upstream: https://github.com/vocksel/rbxtheme/blob/main/src/theme/getScopeColors.js
+-- upstream: https://github.com/vocksel/Swatch/blob/main/src/theme/getScopeColors.js
 
 local Sift = require("@pkg/Sift")
 
