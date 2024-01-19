@@ -19,9 +19,6 @@ jobs:
 
       - run: just init
 
-      - name: Remove spec files
-        run: rm -rf **/*.spec.lua
-
       - name: Get model file name
         run: |
           name=$(just _get-plugin-name)
