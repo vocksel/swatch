@@ -18,18 +18,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: just init
-
-      - name: Get model file name
-        run: |
-          name=$(just _get-plugin-name)
-          echo "MODEL_FILE=$name-${{ github.ref }}.rbxm" >> $GITHUB_ENV
-
-      - name: Build
-        run: just build-here prod ${{ env.MODEL_FILE }}
+      - run: just build-here prod
 
       - uses: softprops/action-gh-release@v1
         if: ${{ github.event.release }}
         with:
-          files: ${{ env.MODEL_FILE }}
+          files: |
+            *.rbxm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
