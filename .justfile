@@ -96,12 +96,14 @@ plugin-analyze:
 		--defs={{ global_defs_path }} \
 		--defs={{ testez_defs_path }} \
 		--settings="./.vscode/settings.json" \
-		--ignore=**/_Index/** \
+		--ignore=**/Packages/** \
 		{{ plugin_source }}
 
 server-analyze:
 	rojo sourcemap {{ server_project }} -o {{ sourcemap_path }}
-	luau-lsp analyze --sourcemap={{ sourcemap_path }} server/src/
+	luau-lsp analyze --sourcemap={{ sourcemap_path }} \
+		--settings="./.vscode/settings.json" \
+		{{ server_source }}
 
 analyze:
 	just plugin-analyze

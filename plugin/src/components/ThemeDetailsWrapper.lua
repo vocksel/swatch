@@ -1,12 +1,10 @@
-local Root = script:FindFirstAncestor("Swatch")
-
-local React = require(Root.Packages.React)
-local Sift = require(Root.Packages.Sift)
-local styles = require(script.Parent.styles)
-local LoadingSpinner = require(script.Parent.LoadingSpinner)
-local ThemeDetails = require(script.Parent.ThemeDetails)
-local fetchExtensionThemes = require(script.Parent.Parent.fetchExtensionThemes)
-local types = require(script.Parent.Parent.types)
+local React = require("@pkg/React")
+local Sift = require("@pkg/Sift")
+local styles = require("./styles")
+local LoadingSpinner = require("./LoadingSpinner")
+local ThemeDetails = require("./ThemeDetails")
+local fetchExtensionThemes = require("@root/fetchExtensionThemes")
+local types = require("@root/types")
 
 local useState = React.useState
 local useEffect = React.useEffect
