@@ -22,7 +22,7 @@ jobs:
       - name: Get model file name
         run: |
           name=$(just _get-plugin-name)
-          echo "MODEL_FILE=$name.rbxm" >> $GITHUB_ENV
+          echo "MODEL_FILE=$name-${{ github.ref }}.rbxm" >> $GITHUB_ENV
 
       - name: Build
         run: just build-here prod ${{ env.MODEL_NAME }}
