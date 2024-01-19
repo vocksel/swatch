@@ -95,6 +95,7 @@ plugin-analyze:
 	luau-lsp analyze --sourcemap={{ sourcemap_path }} \
 		--defs={{ global_defs_path }} \
 		--defs={{ testez_defs_path }} \
+		--settings="./.vscode/settings.json" \
 		--ignore=**/_Index/** \
 		{{ plugin_source }}
 
