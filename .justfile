@@ -1,6 +1,6 @@
 #!/usr/bin/env just --justfile
 
-project_name := "rbxtheme"
+project_name := "Swatch"
 plugins_dir := if os_family() == "unix" {
 	"$HOME/Documents/Roblox/Plugins"
 } else {
