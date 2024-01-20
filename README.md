@@ -1,14 +1,14 @@
 # Swatch
 
-Use any VSCode theme in Roblox Studio.
+Swatch is a plugin for Roblox Studio that can search for VSCode themes and apply them to Studio's script editor.
 
 ## Installation
 
-- Download from the Roblox Marketplace
+Install Swatch from the [Roblox Marketplace](https://create.roblox.com/marketplace/asset/16016821748/Swatch)
 
 ## Development
 
-Install prerequisites:
+Requirements:
 - [Visual Studio Code](https://code.visualstudio.com/) and the following extensions:
   - [Selene](https://marketplace.visualstudio.com/items?itemName=Kampfkarren.selene-vscode)
   - [StyLua](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.stylua)
