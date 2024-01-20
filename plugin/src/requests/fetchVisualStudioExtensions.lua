@@ -1,8 +1,8 @@
 local HttpService = game:GetService("HttpService")
 
-local request = require("@root/request")
 local constants = require("@root/constants")
-local createUrl = require("@root/createUrl")
+local createUrl = require("./createUrl")
+local request = require("./request")
 
 local function fetchVisualStudioExtensions(query: { [string]: any }?)
 	return request({

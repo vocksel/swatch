@@ -1,5 +1,5 @@
 local React = require("@pkg/React")
-local fetchVisualStudioExtensions = require("@root/fetchVisualStudioExtensions")
+local fetchVisualStudioExtensions = require("@root/requests/fetchVisualStudioExtensions")
 local types = require("@root/types")
 local LoadingSpinner = require("./LoadingSpinner")
 local ExtensionsList = require("./ExtensionsList")
