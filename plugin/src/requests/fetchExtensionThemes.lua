@@ -8,7 +8,7 @@ local request = require("./request")
 local function fetchExtensionThemes(extension: types.PublishedExtension, version: string)
 	return request({
 		method = "GET",
-		url = createUrl(`{constants.SERVER_URL}/get-themes`, {
+		url = createUrl(`{constants.SERVER_URL}/v1/themes`, {
 			extensionName = extension.extensionName,
 			publisherName = extension.publisher.publisherName,
 			extensionVersion = version,

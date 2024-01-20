@@ -7,7 +7,7 @@ local request = require("./request")
 local function fetchVisualStudioExtensions(query: { [string]: any }?)
 	return request({
 		method = "GET",
-		url = createUrl(`{constants.SERVER_URL}/extensions`, query),
+		url = createUrl(`{constants.SERVER_URL}/v1/extensions`, query),
 	}):andThen(function(res)
 		return HttpService:JSONDecode(res.Body)
 	end)
