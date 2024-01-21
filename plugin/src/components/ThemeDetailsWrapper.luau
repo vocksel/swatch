@@ -3,7 +3,7 @@ local Sift = require("@pkg/Sift")
 local styles = require("./styles")
 local LoadingSpinner = require("./LoadingSpinner")
 local ThemeDetails = require("./ThemeDetails")
-local fetchExtensionThemes = require("@root/fetchExtensionThemes")
+local fetchExtensionThemes = require("@root/requests/fetchExtensionThemes")
 local types = require("@root/types")
 
 local useState = React.useState

@@ -72,6 +72,6 @@ local function getThemes(request)
 end
 
 return {
-	route = "/get-themes",
+	route = "/v1/themes",
 	callback = getThemes,
 }

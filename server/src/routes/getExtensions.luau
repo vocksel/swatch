@@ -127,6 +127,6 @@ local function getExtensions(request)
 end
 
 return {
-	route = "/extensions",
+	route = "/v1/extensions",
 	callback = getExtensions,
 }
