@@ -5,6 +5,7 @@ local getThemes = require("./routes/getThemes")
 local getExtensions = require("./routes/getExtensions")
 local logging = require("./logging")
 
+local ADDRESS = process.env.ADDRESS or "http://0.0.0.0"
 local PORT = tonumber(process.env.PORT) or 8080
 
 local routes = {
@@ -19,7 +20,7 @@ local routes = {
 }
 
 net.serve(PORT, {
-	address = "http://0.0.0.0",
+	address = ADDRESS,
 	handleRequest = function(request)
 		logging.debug(`{request.method} {request.path}`)
 
@@ -48,4 +49,4 @@ net.serve(PORT, {
 		}
 	end,
 })
-logging.info("server started on port", PORT)
+logging.info(`server started at {ADDRESS}:{PORT}`)

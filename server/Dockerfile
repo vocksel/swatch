@@ -17,11 +17,11 @@ RUN apt-get install -y \
 COPY ./server/src /server
 WORKDIR /server
 
-# HACK: Need to install a forked Lune that binds servers to 0.0.0.0
+# HACK: Need to install Lune from its main branch to bind servers to 0.0.0.0
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 RUN apt-get install -y git gcc
-RUN git clone --single-branch --branch serve-from-other-ips https://github.com/vocksel/lune
+RUN git clone https://github.com/lune-org/lune
 RUN cargo build --release --manifest-path lune/Cargo.toml
 CMD [ "./lune/target/release/lune", "run", "server.luau" ]
 
