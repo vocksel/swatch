@@ -15,7 +15,7 @@ local function createUrl(baseUrl: string, query: { [string]: any }?)
 		-- Remove the last ampersand (&) from the query string
 		joinedQuery = joinedQuery:gsub("&$", "")
 
-		return `{baseUrl}?joinedQuery`
+		return `{baseUrl}?{joinedQuery}`
 	else
 		return baseUrl
 	end

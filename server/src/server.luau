@@ -11,7 +11,7 @@ local PORT = tonumber(process.env.PORT) or 8080
 local routes = {
 	[getThemes.route] = getThemes.callback,
 	[getExtensions.route] = getExtensions.callback,
-	["/health"] = function()
+	["/v1/health"] = function()
 		return {
 			status = 200,
 			body = "Healthy",
