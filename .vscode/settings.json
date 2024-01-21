@@ -4,6 +4,10 @@
     "testez.d.lua"
   ],
   "luau-lsp.require.mode": "relativeToFile",
+  "luau-lsp.ignoreGlobs": [
+    "**/_Index/**",
+    "**/build/**"
+  ],
   "luau-lsp.require.directoryAliases": {
     "@lune/": "~/.lune/.typedefs/0.7.11/",
     "@root/": "plugin/src",
