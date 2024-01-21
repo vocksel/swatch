@@ -44,7 +44,8 @@ _get-plugin-name:
 	jq -r .name {{ plugin_root / "default.project.json" }}
 
 _prune:
-	rm -rf {{ plugin_build / "**/*.spec.lua" }}
+	rm -rf {{ plugin_build / "**/*.spec.luau" }}
+	rm -rf {{ plugin_build / "**/*.story.luau" }}
 
 _build target output:
 	-rm -rf {{ plugin_build }}
