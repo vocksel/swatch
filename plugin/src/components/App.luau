@@ -1,6 +1,6 @@
 local React = require("@pkg/React")
 local types = require("@root/types")
-local Home = require("./Home")
+local HomeWrapper = require("./HomeWrapper")
 local ThemeDetailsWrapper = require("./ThemeDetailsWrapper")
 
 local useCallback = React.useCallback
@@ -31,7 +31,7 @@ local function App(_props: Props)
 
 	return React.createElement("Folder", nil, {
 		Home = if view == "Home"
-			then React.createElement(Home, {
+			then React.createElement(HomeWrapper, {
 				onViewExtension = onViewExtension,
 			})
 			else nil,

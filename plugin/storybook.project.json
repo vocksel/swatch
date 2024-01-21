@@ -1,0 +1,11 @@
+{
+  "name": "SwatchStorybook",
+  "tree": {
+    "$className": "DataModel",
+    "ServerScriptService": {
+      "Swatch": {
+        "$path": "build.project.json"
+      }
+    }
+  }
+}
