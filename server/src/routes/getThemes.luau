@@ -10,7 +10,7 @@ local function getThemes(request)
 	local extensionName = request.query.extensionName
 	local extensionVersion = request.query.extensionVersion
 
-	if not (publisherName or extensionName or extensionVersion) then
+	if not (publisherName and extensionName and extensionVersion) then
 		return {
 			status = 500,
 		}
@@ -60,6 +60,9 @@ local function getThemes(request)
 
 				return {
 					status = 200,
+					headers = {
+						["Content-Type"] = "application/json",
+					},
 					body = net.jsonEncode(themes),
 				}
 			end

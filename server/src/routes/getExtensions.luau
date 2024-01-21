@@ -116,6 +116,9 @@ local function getExtensions(request)
 		if extensions then
 			return {
 				status = 200,
+				headers = {
+					["Content-Type"] = "application/json",
+				},
 				body = net.jsonEncode(extensions),
 			}
 		end
