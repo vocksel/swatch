@@ -60,6 +60,9 @@ local function getThemes(request)
 
 				return {
 					status = 200,
+					headers = {
+						["Content-Type"] = "application/json",
+					},
 					body = net.jsonEncode(themes),
 				}
 			end
