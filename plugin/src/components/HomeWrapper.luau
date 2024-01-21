@@ -14,7 +14,7 @@ export type Props = {
 
 local function HomeWrapper(props: Props)
 	local extensions, setExtensions = useState({} :: { PublishedExtension })
-	local searchTerm, setSearchTerm = useState("")
+	local searchTerm, setSearchTerm = useState(nil :: string?)
 	local err, setErr = useState(nil :: string?)
 
 	useEffect(function()
@@ -22,7 +22,7 @@ local function HomeWrapper(props: Props)
 		fetchVisualStudioExtensions({
 				-- page = page, -- TODO: Increment the page when scrolling to the bottom of the list
 				pageSize = 20,
-				searchTerm = if searchTerm ~= "" then searchTerm else "theme",
+				searchTerm = if searchTerm then searchTerm else "theme",
 			})
 			:andThen(function(newExtensions)
 				setExtensions(newExtensions)
