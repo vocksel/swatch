@@ -1,5 +1,6 @@
 local React = require("@pkg/React")
 local types = require("@root/types")
+local ViewportTrigger = require("./ViewportTrigger")
 local getLayoutOrder = require("./getLayoutOrder")
 
 type PublishedExtension = types.PublishedExtension
@@ -7,6 +8,7 @@ type PublishedExtension = types.PublishedExtension
 export type Props = {
 	extensions: { PublishedExtension },
 	onView: (extension: PublishedExtension) -> (),
+	onScrollToBottom: (() -> ())?,
 	LayoutOrder: number?,
 }
 
@@ -18,6 +20,11 @@ local function ExtensionsList(props: Props)
 		Layout = React.createElement("UIListLayout", {
 			Padding = PADDING,
 			SortOrder = Enum.SortOrder.LayoutOrder,
+		}),
+
+		Padding = React.createElement("UIPadding", {
+			PaddingBottom = PADDING,
+			PaddingRight = PADDING,
 		}),
 	}
 
@@ -108,12 +115,26 @@ local function ExtensionsList(props: Props)
 				}),
 			}),
 		})
+
+		if props.onScrollToBottom then
+			children.BottomTrigger = React.createElement(ViewportTrigger, {
+				onTrigger = props.onScrollToBottom,
+				LayoutOrder = getLayoutOrder(),
+			})
+		end
 	end
 
-	return React.createElement("Frame", {
+	return React.createElement("ScrollingFrame", {
 		LayoutOrder = props.LayoutOrder,
-		AutomaticSize = Enum.AutomaticSize.Y,
-		Size = UDim2.fromScale(1, 0),
+		Size = UDim2.fromScale(1, 1),
+		AutomaticCanvasSize = Enum.AutomaticSize.Y,
+		CanvasSize = UDim2.fromScale(1, 0),
+		ScrollingDirection = Enum.ScrollingDirection.Y,
+		ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255),
+		ScrollBarThickness = 4,
+		ScrollBarImageTransparency = 0.2,
+		VerticalScrollBarInset = Enum.ScrollBarInset.None,
+		BorderSizePixel = 0,
 		BackgroundTransparency = 1,
 	}, children)
 end
