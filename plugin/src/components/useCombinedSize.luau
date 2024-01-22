@@ -3,7 +3,6 @@ local CollectionService = game:GetService("CollectionService")
 
 local React = require("@pkg/React")
 local Sift = require("@pkg/Sift")
-local useEvent = require("./useEvent")
 
 local useCallback = React.useCallback
 local useEffect = React.useEffect
