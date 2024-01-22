@@ -3,6 +3,7 @@ local types = require("@root/types")
 local LoadingSpinner = require("./LoadingSpinner")
 local ExtensionsList = require("./ExtensionsList")
 local getLayoutOrder = require("./getLayoutOrder")
+local useCombinedSize = require("./useCombinedSize")
 
 type PublishedExtension = types.PublishedExtension
 type ExtensionTheme = types.ExtensionTheme
@@ -16,12 +17,13 @@ export type Props = {
 	extensions: { PublishedExtension },
 	onSearch: (searchTerm: string) -> (),
 	onViewExtension: (extension: PublishedExtension) -> (),
+	onFetchMore: (() -> ())?,
 	searchTerm: string?,
 	err: string?,
 }
 
 local function Home(props: Props)
-	local isLoading = useMemo(function()
+	local isLoading: boolean = useMemo(function()
 		return #props.extensions == 0 and not props.err
 	end, { props.extensions, props.err })
 
@@ -31,12 +33,12 @@ local function Home(props: Props)
 		end
 	end, {})
 
-	return React.createElement("ScrollingFrame", {
+	local combinedSize = useCombinedSize()
+
+	return React.createElement("Frame", {
 		Size = UDim2.fromScale(1, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
-		CanvasSize = UDim2.fromScale(1, 0),
-		AutomaticCanvasSize = Enum.AutomaticSize.Y,
 	}, {
 		Layout = React.createElement("UIListLayout", {
 			SortOrder = Enum.SortOrder.LayoutOrder,
@@ -55,6 +57,7 @@ local function Home(props: Props)
 			Size = UDim2.fromScale(1, 0),
 			AutomaticSize = Enum.AutomaticSize.Y,
 			BackgroundTransparency = 1,
+			[React.Tag] = combinedSize.tag,
 		}, {
 			Input = React.createElement("TextBox", {
 				Text = if props.searchTerm then props.searchTerm else "",
@@ -93,32 +96,34 @@ local function Home(props: Props)
 			})
 			else nil,
 
-		ExtensionsListWrapper = React.createElement(
-			"Frame",
-			{
+		ExtensionsListWrapper = React.createElement("Frame", {
+			Size = UDim2.fromScale(1, 1) - combinedSize.height,
+			BackgroundTransparency = 1,
+			LayoutOrder = getLayoutOrder(),
+		}, {
+			ExtensionList = React.createElement(ExtensionsList, {
+				extensions = props.extensions,
+				onScrollToBottom = props.onFetchMore,
+				onView = props.onViewExtension,
+			}),
+		}),
+
+		Loading = if isLoading
+			then React.createElement("Frame", {
+				LayoutOrder = getLayoutOrder(),
 				Size = UDim2.fromScale(1, 0),
 				AutomaticSize = Enum.AutomaticSize.Y,
 				BackgroundTransparency = 1,
-				LayoutOrder = getLayoutOrder(),
-			},
-			if isLoading
-				then {
-					Layout = React.createElement("UIListLayout", {
-						HorizontalAlignment = Enum.HorizontalAlignment.Center,
-						VerticalAlignment = Enum.VerticalAlignment.Center,
-					}),
+				[React.Tag] = combinedSize.tag,
+			}, {
+				Layout = React.createElement("UIListLayout", {
+					HorizontalAlignment = Enum.HorizontalAlignment.Center,
+					VerticalAlignment = Enum.VerticalAlignment.Center,
+				}),
 
-					LoadingSpinner = React.createElement(LoadingSpinner),
-				}
-				else {
-					ExtensionList = if not isLoading
-						then React.createElement(ExtensionsList, {
-							extensions = props.extensions,
-							onView = props.onViewExtension,
-						})
-						else nil,
-				}
-		),
+				LoadingSpinner = React.createElement(LoadingSpinner),
+			})
+			else nil,
 	})
 end
 

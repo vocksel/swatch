@@ -29,7 +29,10 @@ local function App(_props: Props)
 		setView("ThemeDetails")
 	end, {})
 
-	return React.createElement("Folder", nil, {
+	return React.createElement("Frame", {
+		Size = UDim2.fromScale(1, 1),
+		BackgroundTransparency = 1,
+	}, {
 		Home = if view == "Home"
 			then React.createElement(HomeWrapper, {
 				onViewExtension = onViewExtension,
