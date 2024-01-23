@@ -4,7 +4,12 @@ local ExtensionQueryFlags = require("../enums/ExtensionQueryFlags")
 
 type ExtensionQueryFlags = ExtensionQueryFlags.ExtensionQueryFlags
 
+local MAX_PAGE_SIZE = 100
 local API_VERSION = "7.2-preview.1"
+local PAGE_SIZE_TOO_LARGE_ERROR = {
+	message = `Attempted to load too many extensions at once`,
+	detail = `The pageSize must be in the range 0-{MAX_PAGE_SIZE}`,
+}
 
 local FLAGS: { ExtensionQueryFlags } = {
 	ExtensionQueryFlags.IncludeLatestVersionOnly,
@@ -26,7 +31,18 @@ type InternalFetchOptions = FetchOptions & typeof(DEFAULT_FETCH_OPTIONS)
 local function getExtensions(request)
 	local options = table.clone(DEFAULT_FETCH_OPTIONS)
 	for key, value in request.query do
-		options[key] = value
+		local valueAsNumber = tonumber(value)
+		options[key] = if valueAsNumber then valueAsNumber else value
+	end
+
+	if options.pageSize > MAX_PAGE_SIZE then
+		return {
+			status = 400,
+			headers = {
+				["Content-Type"] = "application/json",
+			},
+			body = net.jsonEncode(PAGE_SIZE_TOO_LARGE_ERROR),
+		}
 	end
 
 	local flags = 0
