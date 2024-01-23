@@ -19,6 +19,9 @@ local routes = {
 	end,
 }
 
+logging.debug("Environment")
+logging.debug(process.env)
+
 net.serve(PORT, {
 	address = ADDRESS,
 	handleRequest = function(request)
