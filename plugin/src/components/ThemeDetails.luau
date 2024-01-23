@@ -3,10 +3,10 @@ local Sift = require("@pkg/Sift")
 local types = require("@root/types")
 local applyTheme = require("@root/applyTheme")
 local getLayoutOrder = require("./getLayoutOrder")
+local ThemeLabel = require("./ThemeLabel")
 
 local useCallback = React.useCallback
 
-local ACTION_BUTTON_WIDTH = 120
 local PADDING = UDim.new(0, 8)
 
 export type Props = {
@@ -58,68 +58,9 @@ local function ThemeDetails(providedProps: Props)
 			AutomaticSize = Enum.AutomaticSize.Y,
 			Size = UDim2.fromScale(1, 0),
 		}, {
-			Layout = React.createElement("UIListLayout", {
-				SortOrder = Enum.SortOrder.LayoutOrder,
-				FillDirection = Enum.FillDirection.Horizontal,
-				VerticalAlignment = Enum.VerticalAlignment.Center,
-			}),
-
-			Padding = React.createElement("UIPadding", {
-				PaddingTop = PADDING,
-				PaddingRight = PADDING,
-				PaddingBottom = PADDING,
-				PaddingLeft = PADDING,
-			}),
-
-			Main = React.createElement("Frame", {
-				LayoutOrder = getLayoutOrder(),
-				Size = UDim2.fromScale(1, 0) - UDim2.fromOffset(ACTION_BUTTON_WIDTH, 0),
-				AutomaticSize = Enum.AutomaticSize.Y,
-				BackgroundTransparency = 1,
-			}, {
-				Layout = React.createElement("UIListLayout", {
-					SortOrder = Enum.SortOrder.LayoutOrder,
-					Padding = PADDING,
-				}),
-
-				Name = React.createElement("TextLabel", {
-					LayoutOrder = getLayoutOrder(),
-					AutomaticSize = Enum.AutomaticSize.XY,
-					BackgroundTransparency = 1,
-					Text = theme.name,
-					TextSize = 16,
-					Font = Enum.Font.GothamMedium,
-					TextXAlignment = Enum.TextXAlignment.Left,
-					TextYAlignment = Enum.TextYAlignment.Top,
-					TextColor3 = Color3.fromRGB(255, 255, 255),
-					TextTruncate = Enum.TextTruncate.AtEnd,
-				}),
-			}),
-
-			Action = React.createElement("TextButton", {
-				LayoutOrder = getLayoutOrder(),
-				Text = "Use Theme",
-				TextSize = 14,
-				TextColor3 = Color3.fromRGB(255, 255, 255),
-				BorderSizePixel = 0,
-				Font = Enum.Font.GothamMedium,
-				Size = UDim2.fromOffset(ACTION_BUTTON_WIDTH, 0),
-				AutomaticSize = Enum.AutomaticSize.Y,
-				BackgroundColor3 = Color3.fromRGB(143, 186, 86),
-				[React.Event.Activated] = function()
-					onApplyTheme(theme)
-				end,
-			}, {
-				Padding = React.createElement("UIPadding", {
-					PaddingTop = PADDING,
-					PaddingRight = PADDING,
-					PaddingBottom = PADDING,
-					PaddingLeft = PADDING,
-				}),
-
-				Corner = React.createElement("UICorner", {
-					CornerRadius = PADDING,
-				}),
+			ThemeLabel = React.createElement(ThemeLabel, {
+				theme = theme,
+				onApplyTheme = onApplyTheme,
 			}),
 		})
 	end
