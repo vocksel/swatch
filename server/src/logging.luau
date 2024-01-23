@@ -6,10 +6,10 @@ type LogLevel = "info" | "warning" | "error" | "debug"
 local LOG_LEVEL: string? = if process.env.LOG_LEVEL then process.env.LOG_LEVEL:lower() else "info"
 
 local LOG_LEVEL_ORDER = {
+	"error",
 	"info",
 	"warning",
 	"debug",
-	"error",
 }
 
 local function canLog(logLevelToCheck: LogLevel): boolean
