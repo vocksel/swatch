@@ -37,7 +37,9 @@ net.serve(PORT, {
 
 					return {
 						status = 500,
-						body = result,
+						body = net.jsonEncode({
+							message = "Unknown server error occurred",
+						}),
 					}
 				end
 			end
