@@ -85,7 +85,10 @@ test: clean
     run-in-roblox --place {{ tmpdir / "tests.rbxl" }} --script tests/init.server.lua
 
 serve:
-	docker compose up --build
+	docker compose up
+
+serve-watch:
+	docker compose watch --no-up & docker compose up
 
 plugin-analyze:
 	curl -s -o {{ global_defs_path }} \

@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
   lune-server:
     container_name: lune-server
@@ -8,3 +8,9 @@ services:
         - LUNE_VERSION=0.7.11
     ports:
       - "8080:8080"
+    volumes:
+      - ./server/src:/app/server
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./server
