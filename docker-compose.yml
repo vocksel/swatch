@@ -10,7 +10,4 @@ services:
       - "8080:8080"
     volumes:
       - ./server/src:/app/server
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./server
+    command: ["lune", "run", "server/server.luau"]
