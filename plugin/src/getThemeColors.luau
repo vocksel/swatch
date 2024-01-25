@@ -5,14 +5,14 @@ local constants = require("@root/constants")
 local getScopeColors = require("@root/getScopeColors")
 
 local function getThemeColors(theme): {
-	found: { [string]: Color3 },
+	found: { [string]: string },
 	missing: { string },
 }
 	local found = {}
 	local missing = {}
 
 	for studioName, vscodeColors in constants.ROBLOX_VSCODE_THEME_MAP do
-		local color: Color3
+		local color: string
 
 		for _, vscodeColor in vscodeColors do
 			-- TODO: Some default themes like Dark+ have an "include" field, which

@@ -46,6 +46,7 @@ _get-plugin-name:
 _prune:
 	rm -rf {{ plugin_build / "**/*.spec.luau" }}
 	rm -rf {{ plugin_build / "**/*.story.luau" }}
+	rm -rf {{ plugin_build / "**/*.storybook.luau" }}
 
 _build target output:
 	-rm -rf {{ plugin_build }}
