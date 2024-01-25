@@ -4,6 +4,7 @@ local net = require("@lune/net")
 local getThemes = require("./routes/getThemes")
 local getExtensions = require("./routes/getExtensions")
 local logging = require("./logging")
+local createUrl = require("./createUrl")
 
 local ADDRESS = process.env.ADDRESS or "http://0.0.0.0"
 local PORT = tonumber(process.env.PORT) or 8080
@@ -19,10 +20,13 @@ local routes = {
 	end,
 }
 
+logging.debug("Environment")
+logging.debug(process.env)
+
 net.serve(PORT, {
 	address = ADDRESS,
 	handleRequest = function(request)
-		logging.debug(`{request.method} {request.path}`)
+		logging.debug(`{request.method} {createUrl(request.path, request.query)}`)
 
 		for route, callback in routes do
 			if request.path == route then
@@ -30,14 +34,16 @@ net.serve(PORT, {
 					return callback(request)
 				end, debug.traceback)
 
-				if success then
+				if success and result.status < 500 then
+					logging.debug("response:", result)
 					return result
 				else
-					logging.warn(`FAILED: {request.method} {request.path}\n{result}`)
-
+					logging.err("response failed", result)
 					return {
 						status = 500,
-						body = result,
+						body = net.jsonEncode({
+							message = "Unknown server error occurred",
+						}),
 					}
 				end
 			end

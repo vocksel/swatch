@@ -1,11 +1,11 @@
-local HttpService = game:GetService("HttpService")
+local net = require("@lune/net")
 
 local function createUrl(baseUrl: string, query: { [string]: any }?)
 	if query and next(query) then
 		local joinedQuery = {}
 		for key, value in query do
 			if typeof(value) == "table" then
-				value = HttpService:JSONEncode(value)
+				value = net.jsonEncode(value)
 			else
 				value = tostring(value)
 			end

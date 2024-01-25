@@ -1,31 +1,25 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:24.04
-
-LABEL description="Image for running the Lune server"
-
-EXPOSE 8080
+FROM rust:1.75.0 AS build-lune
 
 ARG LUNE_VERSION
 
-RUN apt-get update
-RUN apt-get install -y \
-	build-essential \
-	curl \
-	unzip
-
-COPY ./server/src /server
-WORKDIR /server
+RUN apt-get update && apt-get install -y git gcc
 
 # HACK: Need to install Lune from its main branch to bind servers to 0.0.0.0
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-ENV PATH="/root/.cargo/bin:${PATH}"
-RUN apt-get install -y git gcc
 RUN git clone https://github.com/lune-org/lune
 RUN cargo build --release --manifest-path lune/Cargo.toml
-CMD [ "./lune/target/release/lune", "run", "server.luau" ]
 
 # RUN curl -LJO https://github.com/lune-org/lune/releases/download/v${LUNE_VERSION}/lune-${LUNE_VERSION}-linux-aarch64.zip
 # RUN unzip *.zip
 
-# CMD [ "./lune", "server.luau" ]
+FROM ubuntu:24.04 AS server
+
+EXPOSE 8080
+VOLUME [ "/app/server" ]
+WORKDIR /app
+
+# The server spawns processes for these commands
+RUN apt-get update && apt-get install -y curl unzip
+
+COPY --from=build-lune ./lune/target/release/lune /usr/local/bin
