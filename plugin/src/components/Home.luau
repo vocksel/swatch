@@ -2,13 +2,12 @@ local React = require("@pkg/React")
 local types = require("@root/types")
 local LoadingSpinner = require("./LoadingSpinner")
 local ExtensionsList = require("./ExtensionsList")
+local Searchbar = require("./Searchbar")
 local getLayoutOrder = require("./getLayoutOrder")
 local useCombinedSize = require("./useCombinedSize")
 
 type PublishedExtension = types.PublishedExtension
-type ExtensionTheme = types.ExtensionTheme
 
-local useCallback = React.useCallback
 local useMemo = React.useMemo
 
 local PADDING = UDim.new(0, 8)
@@ -26,12 +25,6 @@ local function Home(props: Props)
 	local isLoading: boolean = useMemo(function()
 		return #props.extensions == 0 and not props.err
 	end, { props.extensions, props.err })
-
-	local onSearch = useCallback(function(rbx: TextBox, enterPressed: boolean)
-		if enterPressed then
-			props.onSearch(rbx.Text)
-		end
-	end, {})
 
 	local combinedSize = useCombinedSize()
 
@@ -52,32 +45,15 @@ local function Home(props: Props)
 			PaddingLeft = PADDING,
 		}),
 
-		SearchForm = React.createElement("Frame", {
+		SearchbarWrapper = React.createElement("Frame", {
 			LayoutOrder = getLayoutOrder(),
-			Size = UDim2.fromScale(1, 0),
-			AutomaticSize = Enum.AutomaticSize.Y,
+			AutomaticSize = Enum.AutomaticSize.XY,
 			BackgroundTransparency = 1,
 			[React.Tag] = combinedSize.tag,
 		}, {
-			Input = React.createElement("TextBox", {
-				Text = if props.searchTerm then props.searchTerm else "",
-				PlaceholderText = "Search themes...",
-				Size = UDim2.fromScale(1, 0),
-				TextColor3 = Color3.fromRGB(255, 255, 255),
-				PlaceholderColor3 = Color3.fromRGB(200, 200, 200),
-				TextSize = 16,
-				Font = Enum.Font.Gotham,
-				AutomaticSize = Enum.AutomaticSize.Y,
-				BorderSizePixel = 0,
-				BackgroundColor3 = Color3.fromRGB(100, 100, 100),
-				[React.Event.FocusLost] = onSearch,
-			}, {
-				Padding = React.createElement("UIPadding", {
-					PaddingTop = PADDING,
-					PaddingRight = PADDING,
-					PaddingBottom = PADDING,
-					PaddingLeft = PADDING,
-				}),
+			Searchbar = React.createElement(Searchbar, {
+				searchTerm = props.searchTerm,
+				onSearch = props.onSearch,
 			}),
 		}),
 
