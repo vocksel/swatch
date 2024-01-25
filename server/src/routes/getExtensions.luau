@@ -1,5 +1,6 @@
 local net = require("@lune/net")
 local fetch = require("../fetch")
+local logging = require("../logging")
 local ExtensionQueryFlags = require("../enums/ExtensionQueryFlags")
 
 type ExtensionQueryFlags = ExtensionQueryFlags.ExtensionQueryFlags
@@ -75,6 +76,8 @@ local function getExtensions(request)
 		flags = flags,
 	}
 
+	logging.info(`requesting {options.pageSize} extensions...`)
+
 	local res = fetch({
 		method = "POST",
 		url = "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery",
@@ -91,6 +94,7 @@ local function getExtensions(request)
 		local extensions = responseBody.results[1].extensions
 
 		if extensions then
+			logging.info(`responding with extensions...`)
 			return {
 				status = 200,
 				headers = {

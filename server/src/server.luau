@@ -34,11 +34,11 @@ net.serve(PORT, {
 					return callback(request)
 				end, debug.traceback)
 
-				if success then
+				if success and result.status < 500 then
+					logging.debug("response:", result)
 					return result
 				else
-					logging.warn(`FAILED: {request.method} {request.path}\n{result}`)
-
+					logging.err("response failed", result)
 					return {
 						status = 500,
 						body = net.jsonEncode({
