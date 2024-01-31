@@ -60,8 +60,12 @@ paths:
 # TODO: It would be great to have a tool that could convert the yaml schema into Luau types
 components:
   schemas:
-    # TODO: Grab exact response bodies from the server to create the schema. Use
+    # TODO: Grab exact response bodies via Postman create the schema. Use
     # `plugin/src/types.luau` for more types
+    #
+    # Alternatively, use Postman to generate the API spec to begin with? There's
+    # docs on how to import _into_ Postman, but maybe not export.
+    # https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/
 
     Extension:
       summary: "Extension from the VS Marketplace"
