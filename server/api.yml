@@ -1,0 +1,105 @@
+openapi: 3.1.0
+info:
+  title: Swatch
+  description: |
+    The Swatch API is used by the Swatch plugin for Roblox Studio for querying
+    Microsoft's Visual Studio Marketplace for information about themes and
+    processing those themes into something Roblox Studio can consume.
+  version: 1.0.0
+paths:
+  /v1/extensions:
+    parameters:
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+        description: Size of the page
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Current page
+    get:
+      summary: "Returns a list of extensions from the VS Marketplace"
+      responses:
+        "200":
+          summary: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Extension"
+        "500":
+          summary: "Something went wrong when communicating with VS Marketplace API"
+
+  /v1/themes/:
+    parameters:
+      - in: query
+        name: publisherName
+        schema:
+          type: string
+      - in: query
+        name: extensionName
+        schema:
+          type: string
+      - in: query
+        name: extensionVersion
+        schema:
+          type: string
+    get:
+      summary: "Returns the theme definition(s) of the given VSCode extension"
+      responses:
+        "200":
+          type: array
+          items:
+            $ref: "#/components/schemas/Theme"
+        "400":
+          summary: "One or more of the query parameters were incorrect"
+        "500":
+          summary: "One or more of the query parameters were incorrect"
+
+# TODO: It would be great to have a tool that could convert the yaml schema into Luau types
+components:
+  schemas:
+    # TODO: Grab exact response bodies from the server to create the schema. Use
+    # `plugin/src/types.luau` for more types
+
+    Extension:
+      summary: "Extension from the VS Marketplace"
+      type: object
+      properties:
+        categories:
+          type: { string }
+        deploymentType:
+          type: number
+        displayName:
+          type: string
+        extensionId:
+          type: string
+        extensionName:
+          type: string
+        flags:
+          type: string
+        installationTargets:
+          type: { InstallationTarget }
+        lastUpdated:
+          type: string
+        publishedDate:
+          type: string
+        publisher:
+          type: Publisher
+        releaseDate:
+          type: string
+        shortDescription:
+          type: string
+        statistics:
+          type: { ExtensionStatistic }
+        tags:
+          type: { string }
+        versions:
+          type: { ExtensionVersion }
+
+    Theme:
+      summary: "Mapping of Roblox Studio-compatible color names to VSCode theme colors"
+      type: object
+      properties:
+
