@@ -34,16 +34,6 @@ jobs:
           name: ${{ env.MODEL_FILE }}
           path: ${{ env.MODEL_FILE }}
 
-  server-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: docker/build-push-action@v5
-        with:
-          context: server
-          push: false
-
   analyze:
     runs-on: ubuntu-latest
     steps:

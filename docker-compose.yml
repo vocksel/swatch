@@ -1,18 +1,12 @@
 version: "3"
 services:
-  lune-server:
-    container_name: lune-server
-    build:
-      dockerfile: server/Dockerfile
-      args:
-        - LUNE_VERSION=0.7.11
+  swatch-api:
+    container_name: swatch-api
+    build: ./server
     environment:
       LOG_LEVEL: debug
     ports:
       - "8080:8080"
-    volumes:
-      - ./server/src:/app/server
-    command: ["lune", "run", "server/server.luau"]
 
   swagger:
     container_name: swagger
