@@ -15,19 +15,18 @@ servers:
 paths:
   /extensions:
     parameters:
-      - in: query
-        name: pageSize
-        schema:
-          type: integer
+      - name: pageSize
         description: Size of the page
-      - in: query
-        name: page
+        in: query
         schema:
           type: integer
+      - name: page
         description: Current page
+        in: query
+        schema:
+          type: integer
     get:
       summary: "Returns a list of extensions from the VS Marketplace"
-
       responses:
         "200":
           description: "OK"
@@ -36,7 +35,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Extension"
         "500":
-          summary: "Something went wrong when communicating with VS Marketplace API"
+          description: "Something went wrong when communicating with VS Marketplace API"
 
   /themes/{extensionId}/{extensionVersion}:
     parameters:
@@ -80,12 +79,11 @@ components:
           type: string
         publisher:
           type: string
-        themes:
-          type: array
-          items:
-            $ref: "#/components/schemas/Theme"
+        # themes:
+        #   type: array
+        #   items:
+        #     $ref: "#/components/schemas/Theme"
       example:
-
 
     Theme:
       summary: "Mapping of Roblox Studio-compatible color names to VSCode theme colors"

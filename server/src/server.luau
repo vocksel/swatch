@@ -1,5 +1,6 @@
 local process = require("@lune/process")
 local net = require("@lune/net")
+local fs = require("@lune/fs")
 
 local getThemes = require("./routes/getThemes")
 local getExtensions = require("./routes/getExtensions")
@@ -9,6 +10,8 @@ local createUrl = require("./createUrl")
 local ADDRESS = process.env.ADDRESS or "http://0.0.0.0"
 local PORT = tonumber(process.env.PORT) or 8080
 
+local API_YAML = fs.readFile("/server/api.yml")
+
 local routes = {
 	[getThemes.route] = getThemes.callback,
 	[getExtensions.route] = getExtensions.callback,
@@ -16,6 +19,15 @@ local routes = {
 		return {
 			status = 200,
 			body = "Healthy",
+		}
+	end,
+	["/api"] = function()
+		return {
+			status = 200,
+			headers = {
+				["Content-Type"] = "application/json",
+			},
+			body = API_YAML,
 		}
 	end,
 }
@@ -38,7 +50,7 @@ net.serve(PORT, {
 					logging.debug("response:", result)
 					return result
 				else
-					logging.err("response failed", result)
+					logging.err("response failed for:", result)
 					return {
 						status = 500,
 						body = net.jsonEncode({
