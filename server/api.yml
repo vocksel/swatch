@@ -1,4 +1,5 @@
 openapi: 3.1.0
+
 info:
   title: Swatch
   description: |
@@ -6,8 +7,13 @@ info:
     Microsoft's Visual Studio Marketplace for information about themes and
     processing those themes into something Roblox Studio can consume.
   version: 1.0.0
+  basePath: /v1
+
+servers:
+  - url: https://swatch.vocksel.com/v1
+
 paths:
-  /v1/extensions:
+  /extensions:
     parameters:
       - in: query
         name: pageSize
@@ -21,9 +27,10 @@ paths:
         description: Current page
     get:
       summary: "Returns a list of extensions from the VS Marketplace"
+
       responses:
         "200":
-          summary: "OK"
+          description: "OK"
           content:
             application/json:
               schema:
@@ -31,20 +38,22 @@ paths:
         "500":
           summary: "Something went wrong when communicating with VS Marketplace API"
 
-  /v1/themes/:
+  /themes/{extensionId}/{extensionVersion}:
     parameters:
-      - in: query
-        name: publisherName
+      - in: extensionId
+        name: pageSize
+        required: true
+        format: "string"
         schema:
-          type: string
-      - in: query
-        name: extensionName
-        schema:
-          type: string
-      - in: query
+          type: integer
+        description: Size of the page
+      - in: path
         name: extensionVersion
+        required: true
+        format: "string"
         schema:
-          type: string
+          type: integer
+        description: Current page
     get:
       summary: "Returns the theme definition(s) of the given VSCode extension"
       responses:
@@ -53,54 +62,30 @@ paths:
           items:
             $ref: "#/components/schemas/Theme"
         "400":
-          summary: "One or more of the query parameters were incorrect"
+          description: "One or more of the query parameters were incorrect"
         "500":
-          summary: "One or more of the query parameters were incorrect"
+          description: "One or more of the query parameters were incorrect"
 
-# TODO: It would be great to have a tool that could convert the yaml schema into Luau types
 components:
   schemas:
-    # TODO: Grab exact response bodies via Postman create the schema. Use
-    # `plugin/src/types.luau` for more types
-    #
-    # Alternatively, use Postman to generate the API spec to begin with? There's
-    # docs on how to import _into_ Postman, but maybe not export.
-    # https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/
-
     Extension:
       summary: "Extension from the VS Marketplace"
       type: object
       properties:
-        categories:
-          type: { string }
-        deploymentType:
-          type: number
-        displayName:
-          type: string
         extensionId:
           type: string
-        extensionName:
+        name:
           type: string
-        flags:
-          type: string
-        installationTargets:
-          type: { InstallationTarget }
-        lastUpdated:
-          type: string
-        publishedDate:
+        latestVersion:
           type: string
         publisher:
-          type: Publisher
-        releaseDate:
           type: string
-        shortDescription:
-          type: string
-        statistics:
-          type: { ExtensionStatistic }
-        tags:
-          type: { string }
-        versions:
-          type: { ExtensionVersion }
+        themes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Theme"
+      example:
+
 
     Theme:
       summary: "Mapping of Roblox Studio-compatible color names to VSCode theme colors"
