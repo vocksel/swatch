@@ -13,6 +13,15 @@ servers:
   - url: https://swatch.vocksel.com/v1
 
 paths:
+  /health:
+    get:
+      summary: "Server health"
+      responses:
+        "200":
+          description: "Server is up and healthy"
+        "500":
+          description: "Server is experiencing problems"
+
   /extensions:
     parameters:
       - name: pageSize
