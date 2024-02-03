@@ -8,11 +8,14 @@ local getExtensions = require("./routes/getExtensions")
 local logging = require("./logging")
 local createUrl = require("./createUrl")
 local dirname = require("./dirname")
+local generateLuauTypesFromApi = require("./generateLuauTypesFromApi")
 
 local ADDRESS = process.env.ADDRESS or "http://0.0.0.0"
 local PORT = tonumber(process.env.PORT) or 8080
 local SCRIPT_DIR = dirname()
-local API_SPEC = serde.encode("json", serde.decode("yaml", fs.readFile(`{SCRIPT_DIR}/api.yml`)))
+local API_SPEC = serde.decode("yaml", fs.readFile(`{SCRIPT_DIR}/api.yml`))
+local API_SPEC_JSON = serde.encode("json", API_SPEC)
+local API_TYPES = generateLuauTypesFromApi(API_SPEC)
 
 local routes = {
 	[getThemes.route] = getThemes.callback,
@@ -30,7 +33,16 @@ local routes = {
 				["Content-Type"] = "application/json",
 				["Access-Control-Allow-Origin"] = "*",
 			},
-			body = API_SPEC,
+			body = API_SPEC_JSON,
+		}
+	end,
+	["/types"] = function()
+		return {
+			status = 200,
+			headers = {
+				["Content-Type"] = "application/json",
+			},
+			body = API_TYPES,
 		}
 	end,
 }

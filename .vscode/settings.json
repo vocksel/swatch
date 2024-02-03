@@ -9,7 +9,7 @@
     "**/build/**"
   ],
   "luau-lsp.require.directoryAliases": {
-    "@lune/": "~/.lune/.typedefs/0.7.11/",
+    "@lune/": "~/.lune/.typedefs/0.8.0/",
     "@root/": "plugin/src",
     "@pkg/": "plugin/Packages"
   },
