@@ -12,11 +12,11 @@ FROM ubuntu:24.04 AS server
 
 EXPOSE 8080
 WORKDIR /app
-COPY ./src /app/server
+COPY . .
 
 # The server spawns processes for these commands
 RUN apt-get update && apt-get install -y curl unzip
 
 COPY --from=build-lune ./lune/target/release/lune /usr/local/bin
 
-CMD ["lune", "run", "server/server.luau"]
+CMD ["lune", "run", "src/server.luau"]

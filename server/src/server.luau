@@ -1,16 +1,18 @@
 local process = require("@lune/process")
 local net = require("@lune/net")
 local fs = require("@lune/fs")
+local serde = require("@lune/serde")
 
 local getThemes = require("./routes/getThemes")
 local getExtensions = require("./routes/getExtensions")
 local logging = require("./logging")
 local createUrl = require("./createUrl")
+local dirname = require("./dirname")
 
 local ADDRESS = process.env.ADDRESS or "http://0.0.0.0"
 local PORT = tonumber(process.env.PORT) or 8080
-
-local API_YAML = fs.readFile("/server/api.yml")
+local SCRIPT_DIR = dirname()
+local API_SPEC = serde.encode("json", serde.decode("yaml", fs.readFile(`{SCRIPT_DIR}/api.yml`)))
 
 local routes = {
 	[getThemes.route] = getThemes.callback,
@@ -26,14 +28,12 @@ local routes = {
 			status = 200,
 			headers = {
 				["Content-Type"] = "application/json",
+				["Access-Control-Allow-Origin"] = "*",
 			},
-			body = API_YAML,
+			body = API_SPEC,
 		}
 	end,
 }
-
-logging.debug("Environment")
-logging.debug(process.env)
 
 net.serve(PORT, {
 	address = ADDRESS,
