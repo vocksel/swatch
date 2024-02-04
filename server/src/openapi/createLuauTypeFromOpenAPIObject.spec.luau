@@ -11,13 +11,22 @@ local petstore: OpenAPIObject = serde.decode("yaml", fs.readFile("server/src/ope
 
 assert(petstore.components.schemas, "no schemas found in mock API")
 
-local schemas = createLuauTypeFromOpenAPIObject(petstore.components.schemas)
+-- print("schemas", petstore.components.schemas)
 
-print("schemas", schemas)
+local Pet = createLuauTypeFromOpenAPIObject(petstore.components.schemas.Pet)
+assert(Pet ~= nil, `missing "Pet" schema`)
+assert(Pet.id == "number", `bad Pet.id (expected number, got {Pet.id})`)
+assert(Pet.name == "string", `bad Pet.name (expected string, got {Pet.name})`)
+assert(Pet.tag == "string?", `bad Pet.tag (expected string?, got {Pet.tag})`)
 
-assert(schemas.Pet, "missing type Pet")
-assert(schemas.Pets, "missing type Pets")
-assert(schemas.Error, "missing type Error")
+local Pets = createLuauTypeFromOpenAPIObject(petstore.components.schemas.Pets)
+assert(Pets ~= nil, `missing "Pets" schema`)
+assert(Pets.id == "number", `bad Pets.id (expected number, got {Pets.id})`)
+assert(Pets.name == "string", `bad Pets.name (expected string, got {Pets.name})`)
+assert(Pets.tag == "string?", `bad Pets.tag (expected string?, got {Pets.tag})`)
+
+local Error = createLuauTypeFromOpenAPIObject(petstore.components.schemas.Error)
+assert(Error, `missing "Error" schema`)
 
 -- assert(nil, "summary is not included in type comment")
 -- assert(nil, "description is not included in type comment")

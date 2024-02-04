@@ -1,22 +1,7 @@
-local function createTypeCommentFromObject(object: Object<any>): string?
-	local comment = {}
-	if object.summary then
-		table.insert(comment, `-- {object.summary}`)
-	end
-	if object.summary and object.description then
-		table.insert(comment, "--")
-	end
-	if object.description then
-		table.insert(comment, `-- {object.description}`)
-	end
-	if #comment > 0 then
-		return table.concat(comment, "\n")
-	else
-		return nil
-	end
-end
+local types = require("@server/openapi/types")
+local createLuauComment = require("@server/openapi/createLuauComment")
 
-type Object<T> = { [string]: T }
+type Object<T> = types.Object<T>
 
 local function createTypePropertiesFromObject(object: Object<any>): Object<string | Object<any>>
 	local inner = {}
@@ -45,39 +30,49 @@ local function createTypePropertiesFromObject(object: Object<any>): Object<strin
 	return inner
 end
 
-type LuauType = {
-	comment: string?,
-	source: Object<any>,
-}
+local function createLuauTypeFromOpenAPIObject(object: Object<any>): types.LuauType
+	local comment = createLuauComment(object)
 
-local function createLuauTypeFromOpenAPIObject(object: Object<any>): LuauType
-	local comment = createTypeCommentFromObject(object)
-
+	print(object)
 	if object.type == "object" then
 		local properties = {}
 
 		if object.properties then
 			for key, value in object.properties do
-				properties[key] = createTypePropertiesFromObject(value)
-				-- inner ..= `{INDENT}{key}: {createTypePropertiesFromObject(value)}?,\n`
+				print(key, value)
+				if typeof(value) == "table" then
+					value = createTypePropertiesFromObject(value)
+				else
+					value = typeof(value)
+				end
+				properties[key] = value
 			end
-			-- inner
 		end
 		local inner = table.concat(properties, "\n")
 
-		print(properties)
+		print("properties", properties)
 
-		local typeString = `export type {name} = \{{inner}\}`
-		if comment then
-			return `{comment}\n{typeString}`
-		else
-			return typeString
-		end
+		return properties
+
+		-- local typeString = `export type {name} = \{{inner}\}`
+		-- if comment then
+		-- 	return `{comment}\n{typeString}`
+		-- else
+		-- 	return typeString
+		-- end
+	elseif object.type == "integer" then
+		return "number"
 	else
 		return {
+			comment = comment,
 			source = typeof(object),
 		}
 	end
+
+	return {
+		name = name,
+		comment = createLuauComment(object),
+	}
 end
 
 return createLuauTypeFromOpenAPIObject
