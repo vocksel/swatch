@@ -1,20 +1,52 @@
-local openapiTypes = require("./typesV3")
+local openapiTypes = require("./openapi31")
+local createLuauTypeFromOpenAPIObject = require("./createLuauTypeFromOpenAPIObject")
 
-local function generateApiTypes(api: openapiTypes.OpenAPI): string
+type ReferenceObject = openapiTypes.ReferenceObject
+type OpenAPIObject = openapiTypes.OpenAPIObject
+
+local function generateApiTypes(api: OpenAPIObject): string
+	print("API", api)
 	local types = {}
 
-	for pathName, path in api.paths do
-		print(pathName, path)
+	-- TODO: Should only need handling for `paths` and the various objects under
+	-- `components`
 
-		if path.parameters then
-			for paramName, param in path.parameters do
+	-- for pathName, path in api.paths do
+	-- 	print(pathName, path)
+
+	-- 	if path.parameters then
+	-- 		for paramName, param in path.parameters do
+	-- 		end
+	-- 	end
+	-- end
+
+	--  TODO: Traverse the entire `api` once and collect anything we'll need
+	--  later for processing?
+
+	-- if api.paths then
+	-- 	for name, path in api.paths do
+	-- 		print(name, path)
+	-- 	end
+	-- end
+
+	if api.components then
+		if api.components.requestBodies then
+			for name, requestBody in api.components.requestBodies do
+				table.insert(types, createLuauTypeFromOpenAPIObject(name, requestBody))
 			end
 		end
-	end
 
-	for name, schema in api.components.schemas do
-		table.insert(types, `export type {name} = {"{}"}`)
-		print(name, schema)
+		if api.components.responses then
+			for name, response in api.components.responses do
+				table.insert(types, createLuauTypeFromOpenAPIObject(name, response))
+			end
+		end
+
+		if api.components.schemas then
+			for name, schema in api.components.schemas do
+				table.insert(types, createLuauTypeFromOpenAPIObject(name, schema))
+			end
+		end
 	end
 
 	return table.concat(types, "\n\n")

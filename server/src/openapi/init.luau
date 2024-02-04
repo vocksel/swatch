@@ -1,6 +1,6 @@
-local types = require("./typesV3")
+local types = require("./openapi31")
 
-export type OpenAPI = types.OpenAPI
+export type OpenAPIObject = types.OpenAPIObject
 
 return {
 	generateApiTypes = require("./generateApiTypes"),

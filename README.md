@@ -33,3 +33,10 @@ Build the plugin:
 ```sh
 just build-watch
 ```
+
+## Testing
+
+Run tests for the server:
+```sh
+just test-server
+```

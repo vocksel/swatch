@@ -85,6 +85,9 @@ test: clean
     rojo build {{ plugin_project }} -o {{ tmpdir / "tests.rbxl" }}
     run-in-roblox --place {{ tmpdir / "tests.rbxl" }} --script tests/init.server.lua
 
+test-server:
+	find server -name "*.spec.lua*" -exec lune run {} \;
+
 serve:
 	docker compose up
 
