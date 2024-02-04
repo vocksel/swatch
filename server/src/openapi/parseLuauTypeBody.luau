@@ -2,7 +2,7 @@ local types = require("@server/openapi/types")
 
 type Object<T> = types.Object<T>
 
-local function parseTypeBody(object: Object<any>): Object<string | Object<any>>
+local function parseLuauTypeBody(object: Object<any>): Object<string | Object<any>>
 	local body = {}
 
 	if object.type then
@@ -12,7 +12,7 @@ local function parseTypeBody(object: Object<any>): Object<string | Object<any>>
 					local valueType = typeof(value)
 
 					if valueType == "table" then
-						valueType = parseTypeBody(value)
+						valueType = parseLuauTypeBody(value)
 					end
 
 					-- TODO: Handle refs
@@ -43,4 +43,4 @@ local function parseTypeBody(object: Object<any>): Object<string | Object<any>>
 	return body
 end
 
-return parseTypeBody
+return parseLuauTypeBody

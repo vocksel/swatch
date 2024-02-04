@@ -2,7 +2,7 @@ local types = require("@server/openapi/types")
 
 type Object<T> = types.Object<T>
 
-local function createLuauComment(object: Object<any>): string?
+local function parseLuauComment(object: Object<any>): string?
 	local comment = {}
 	if object.summary then
 		table.insert(comment, `-- {object.summary}`)
@@ -20,4 +20,4 @@ local function createLuauComment(object: Object<any>): string?
 	end
 end
 
-return createLuauComment
+return parseLuauComment
