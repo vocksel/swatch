@@ -1,28 +1,28 @@
 local types = require("@server/openapi/types")
+local openapiTypes = require("@server/openapi/openapi31")
 local parseLuauTypeBody = require("@server/openapi/parseLuauTypeBody")
 local parseLuauComment = require("@server/openapi/parseLuauComment")
 
-type Object<T> = types.Object<T>
+type SchemaObject = openapiTypes.SchemaObject
 
-local function parseLuauType(name: string, object: Object<any>): types.LuauType
+local function parseLuauType(name: string, schema: SchemaObject): types.LuauType
 	local body
-	if object.type == "object" then
+	if schema.type == "object" then
 		body = {}
 
-		if object.properties then
-			for key, value in object.properties do
+		if schema.properties then
+			for key, value in schema.properties do
 				body[key] = parseLuauTypeBody(value)
 			end
 		end
-	elseif object.type == "integer" then
-		body = "number"
 	else
-		body = object.type
+		body = parseLuauTypeBody(schema)
 	end
 
 	return {
+		name = name,
 		body = body,
-		comment = parseLuauComment(object),
+		comment = parseLuauComment(schema),
 	}
 end
 
