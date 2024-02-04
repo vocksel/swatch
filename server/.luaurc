@@ -1,7 +1,6 @@
 {
 	"aliases": {
 		"lune": "~/.lune/.typedefs/0.8.0/",
-		"plugin": "plugin/src",
-		"server": "server/src"
+		"root": "src"
 	}
 }
