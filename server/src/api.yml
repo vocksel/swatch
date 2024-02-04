@@ -15,7 +15,7 @@ servers:
 paths:
   /health:
     get:
-      summary: "Server health"
+      summary: "Check server health"
       responses:
         "200":
           description: "Server is up and healthy"
@@ -35,7 +35,7 @@ paths:
         schema:
           type: integer
     get:
-      summary: "Returns a list of extensions from the VS Marketplace"
+      summary: "Interact with extensions from the VS Marketplace"
       responses:
         "200":
           description: "OK"
@@ -98,4 +98,3 @@ components:
       summary: "Mapping of Roblox Studio-compatible color names to VSCode theme colors"
       type: object
       properties:
-
