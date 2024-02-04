@@ -13,7 +13,7 @@ local function generateApiTypes(api: openapiTypes.OpenAPI): string
 	end
 
 	for name, schema in api.components.schemas do
-		table.insert(types, `export type {name} = {}`)
+		table.insert(types, `export type {name} = {"{}"}`)
 		print(name, schema)
 	end
 

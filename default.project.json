@@ -1,0 +1,12 @@
+{
+  "name": "default",
+  "tree": {
+    "$className": "Folder",
+    "server": {
+      "$path": "./server"
+    },
+    "plugin": {
+      "$path": "./plugin"
+    }
+  }
+}
