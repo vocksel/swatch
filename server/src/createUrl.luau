@@ -9,7 +9,7 @@ local function createUrl(baseUrl: string, query: { [string]: any }?)
 			else
 				value = tostring(value)
 			end
-			table.insert(joinedQuery, `{key}="{value}"`)
+			table.insert(joinedQuery, `{key}={value}`)
 		end
 
 		return `{baseUrl}?{table.concat(joinedQuery, "&")}`
