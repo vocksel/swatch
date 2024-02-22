@@ -1,5 +1,5 @@
 local getThemeColors = require("@root/getThemeColors")
-local types = require("@root/")
+local types = require("@root/types")
 
 local function applyTheme(theme: types.ExtensionTheme, studio: Studio): string?
 	local colors = getThemeColors(theme)
