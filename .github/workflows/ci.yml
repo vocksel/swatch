@@ -18,8 +18,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Lint
-        run: just lint
+      - run: just lint
 
       - name: Get model file name
         run: |
