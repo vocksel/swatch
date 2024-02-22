@@ -5,9 +5,12 @@ local getThemes = require("./routes/getThemes")
 local getExtensions = require("./routes/getExtensions")
 local logging = require("./logging")
 local createUrl = require("./createUrl")
+local dirname = require("./dirname")
+local createStaticRoutes = require("./createStaticRoutes")
 
 local ADDRESS = process.env.ADDRESS or "http://0.0.0.0"
 local PORT = tonumber(process.env.PORT) or 8080
+local SCRIPT_DIR = dirname()
 
 local routes = {
 	[getThemes.route] = getThemes.callback,
@@ -20,8 +23,12 @@ local routes = {
 	end,
 }
 
-logging.debug("Environment")
-logging.debug(process.env)
+for k, v in createStaticRoutes(`{SCRIPT_DIR}/../static`) do
+	assert(routes[k] == nil, "Failed to create static route for {k} (route already exists)")
+	routes[k] = v
+end
+
+print("Routes", routes)
 
 net.serve(PORT, {
 	address = ADDRESS,
@@ -38,7 +45,7 @@ net.serve(PORT, {
 					logging.debug("response:", result)
 					return result
 				else
-					logging.err("response failed", result)
+					logging.err("response failed for:", result)
 					return {
 						status = 500,
 						body = net.jsonEncode({

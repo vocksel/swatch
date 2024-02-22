@@ -1,7 +1,17 @@
 version: "3"
 services:
-  swatch-api:
-    container_name: swatch-api
+  server:
+    container_name: server
     build: ./server
+    environment:
+      LOG_LEVEL: debug
     ports:
       - "8080:8080"
+
+  swagger:
+    container_name: swagger
+    image: swaggerapi/swagger-ui:v5.11.2
+    environment:
+      URL: http://localhost:8080/openapi.yml
+    ports:
+      - "8081:8080"

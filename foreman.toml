@@ -1,7 +1,7 @@
 [tools]
 darklua = { source = "seaofvoices/darklua", version = "0.12.1" }
 luau-lsp = { source = "JohnnyMorganz/luau-lsp", version = "1.x" }
-lune = { source = "lune-org/lune", version = "0.7.11" }
+lune = { source = "lune-org/lune", version = "0.8.0" }
 rojo = { source = "rojo-rbx/rojo", version = "7.2.1" }
 run-in-roblox = { source = "rojo-rbx/run-in-roblox", version = "0.3.0" }
 selene = { source = "kampfkarren/selene", version = "0.25.0" }
