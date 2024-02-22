@@ -1,19 +1,16 @@
 local process = require("@lune/process")
 local net = require("@lune/net")
-local fs = require("@lune/fs")
-local serde = require("@lune/serde")
 
 local getThemes = require("./routes/getThemes")
 local getExtensions = require("./routes/getExtensions")
 local logging = require("./logging")
 local createUrl = require("./createUrl")
 local dirname = require("./dirname")
+local createStaticRoutes = require("./createStaticRoutes")
 
 local ADDRESS = process.env.ADDRESS or "http://0.0.0.0"
 local PORT = tonumber(process.env.PORT) or 8080
 local SCRIPT_DIR = dirname()
-local API_SPEC = serde.decode("yaml", fs.readFile(`{SCRIPT_DIR}/api.yml`))
-local API_SPEC_JSON = serde.encode("json", API_SPEC)
 
 local routes = {
 	[getThemes.route] = getThemes.callback,
@@ -24,17 +21,14 @@ local routes = {
 			body = "Healthy",
 		}
 	end,
-	["/api"] = function()
-		return {
-			status = 200,
-			headers = {
-				["Content-Type"] = "application/json",
-				["Access-Control-Allow-Origin"] = "*",
-			},
-			body = API_SPEC_JSON,
-		}
-	end,
 }
+
+for k, v in createStaticRoutes(`{SCRIPT_DIR}/../static`) do
+	assert(routes[k] == nil, "Failed to create static route for {k} (route already exists)")
+	routes[k] = v
+end
+
+print("Routes", routes)
 
 net.serve(PORT, {
 	address = ADDRESS,

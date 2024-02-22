@@ -12,6 +12,6 @@ services:
     container_name: swagger
     image: swaggerapi/swagger-ui:v5.11.2
     environment:
-      URL: http://localhost:8080/api
+      URL: http://localhost:8080/openapi.yml
     ports:
       - "8081:8080"

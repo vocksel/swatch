@@ -51,7 +51,7 @@ paths:
       summary: "Interact with extensions from the VS Marketplace"
       responses:
         "200":
-          summary: "OK"
+          description: "OK"
           content:
             application/json:
               schema:
@@ -67,8 +67,8 @@ paths:
 
   /themes/{extensionId}/{extensionVersion}:
     parameters:
-      - in: extensionId
-        name: pageSize
+      - in: path
+        name: extensionId
         required: true
         format: "string"
         schema:
@@ -85,6 +85,7 @@ paths:
       summary: "Returns the theme definition(s) of the given VSCode extension"
       responses:
         "200":
+          description: "OK"
           content:
             application/json:
               schema:
@@ -176,6 +177,7 @@ components:
 
   responses:
     Error:
+      description: ""
       type: object
       required: false
       properties:
@@ -183,11 +185,13 @@ components:
           type: string
 
     StatusOnly:
+      description: ""
       type: object
       properties:
         status: number
 
     BaseResponse:
+      description: ""
       type: object
       properties:
         status: number
