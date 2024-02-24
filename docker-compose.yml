@@ -1,13 +1,17 @@
 version: "3"
 services:
-  lune-server:
-    container_name: lune-server
-    build:
-      dockerfile: server/Dockerfile
-      args:
-        - LUNE_VERSION=0.7.11
+  server:
+    container_name: server
+    build: ./server
+    environment:
+      LOG_LEVEL: debug
     ports:
       - "8080:8080"
-    volumes:
-      - ./server/src:/app/server
-    command: ["lune", "run", "server/server.luau"]
+
+  swagger:
+    container_name: swagger
+    image: swaggerapi/swagger-ui:v5.11.2
+    environment:
+      URL: http://localhost:8080/openapi.yml
+    ports:
+      - "8081:8080"

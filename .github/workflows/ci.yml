@@ -18,8 +18,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Lint
-        run: just lint
+      - run: just lint
 
       - name: Get model file name
         run: |
@@ -50,3 +49,18 @@ jobs:
 
       - name: Run Luau analysis
         run: just analyze
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: extractions/setup-just@v1
+
+      - uses: Roblox/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: just init
+
+      - run: just test-server

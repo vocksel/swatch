@@ -1,5 +1,5 @@
 {
-  "luau-lsp.sourcemap.rojoProjectFile": "plugin/default.project.json",
+  "luau-lsp.sourcemap.rojoProjectFile": "default.project.json",
   "luau-lsp.types.definitionFiles": [
     "testez.d.lua"
   ],
@@ -9,9 +9,11 @@
     "**/build/**"
   ],
   "luau-lsp.require.directoryAliases": {
-    "@lune/": "~/.lune/.typedefs/0.7.11/",
+    "@lune/": "~/.lune/.typedefs/0.8.0/",
     "@root/": "plugin/src",
-    "@pkg/": "plugin/Packages"
+    "@pkg/": "plugin/Packages",
+    "@plugin/": "plugin/src",
+    "@server/": "server/src"
   },
   "files.associations": {
     "*.luau": "lua"

@@ -1,0 +1,203 @@
+openapi: 3.1.0
+
+info:
+  title: Swatch
+  description: |
+    The Swatch API is used by the Swatch plugin for Roblox Studio for querying
+    Microsoft's Visual Studio Marketplace for information about themes and
+    processing those themes into something Roblox Studio can consume.
+  version: 1.0.0
+  basePath: /v1
+
+servers:
+  - url: https://swatch.vocksel.com/v1
+  - url: http://localhost:8080/v1
+
+paths:
+  /health:
+    get:
+      summary: "Check server health"
+      responses:
+        "200":
+          summary: "OK"
+          description: "Server is up and healthy"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/responses/StatusOnly"
+        "500":
+          summary: "Uh oh"
+          description: "Server is experiencing problems"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/responses/Error"
+
+  /extensions:
+    parameters:
+      - name: pageSize
+        description: Size of the page
+        in: query
+        schema:
+          type: integer
+      - name: page
+        description: Current page
+        in: query
+        schema:
+          type: integer
+    get:
+      summary: "Interact with extensions from the VS Marketplace"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/ExtensionListResponse"
+        "500":
+          description: "Something went wrong when communicating with VS Marketplace API"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/responses/ServerErrorResponse"
+
+  /themes/{extensionId}/{extensionVersion}:
+    parameters:
+      - in: path
+        name: extensionId
+        required: true
+        format: "string"
+        schema:
+          type: integer
+        description: Size of the page
+      - in: path
+        name: extensionVersion
+        required: true
+        format: "string"
+        schema:
+          type: integer
+        description: Current page
+    get:
+      summary: "Returns the theme definition(s) of the given VSCode extension"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Theme"
+        "400":
+          description: "One or more of the query parameters were incorrect"
+        "500":
+          description: "One or more of the query parameters were incorrect"
+
+components:
+  schemas:
+    Extension:
+      summary: "Extension from the VS Marketplace"
+      type: object
+      properties:
+        extensionId:
+          type: string
+        name:
+          type: string
+        latestVersion:
+          type: string
+        publisher:
+          type: string
+      example:
+        extensionId: "12345"
+        name: "Extension"
+        latestVersion: "v1.0.0"
+        publisher: "OnlyTwentyCharacters"
+
+    BaseResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: number
+        data:
+          type: any
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+
+    ServerErrorResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - type: object
+          required:
+            - error
+
+    ExtensionListResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - type: object
+          data:
+            type: array
+            items:
+              type: object
+              $ref: "#/components/schemas/Extension"
+
+    Theme:
+      summary: "Mapping of Roblox Studio-compatible color names to VSCode theme colors"
+      type: object
+      properties:
+        themeType:
+          type: string
+        colors:
+          type: object
+
+    ThemeResponse:
+      type: object
+      properties:
+        status:
+          type: number
+        data:
+          type: object
+          $ref: "#/components/schemas/Theme"
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+
+  responses:
+    Error:
+      description: ""
+      type: object
+      required: false
+      properties:
+        message:
+          type: string
+
+    StatusOnly:
+      description: ""
+      type: object
+      properties:
+        status: number
+
+    BaseResponse:
+      description: ""
+      type: object
+      properties:
+        status: number
+        data:
+          type: object
+        error:
+          $ref: "#/components/responses/Error"
+      required:
+        - status
