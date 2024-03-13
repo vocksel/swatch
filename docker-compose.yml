@@ -2,7 +2,10 @@ version: "3"
 services:
   server:
     container_name: server
-    build: ./server
+    build:
+      context: ./server
+      args:
+        - LUNE_VERSION=0.8.2
     environment:
       LOG_LEVEL: debug
     ports:
