@@ -1,3 +1,5 @@
+export type View = "Home" | "ThemeDetails" | "History" | "Settings" | "About"
+
 type ArtifactFileAssetType =
 	"Microsoft.VisualStudio.Code.Manifest"
 	| "Microsoft.VisualStudio.Services.Content.Changelog"

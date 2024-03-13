@@ -2,6 +2,7 @@ local React = require("@pkg/React")
 local types = require("@root/types")
 local HomeWrapper = require("./HomeWrapper")
 local ThemeDetailsWrapper = require("./ThemeDetailsWrapper")
+local NavBar = require("./NavBar")
 
 local useCallback = React.useCallback
 local useState = React.useState
@@ -9,14 +10,17 @@ local useState = React.useState
 type PublishedExtension = types.PublishedExtension
 type ExtensionTheme = types.ExtensionTheme
 
-export type View = "Home" | "ThemeDetails"
-
 export type Props = {
 	plugin: Plugin,
 }
 
+local VIEWS: { types.View } = {
+	"Home",
+	"History",
+}
+
 local function App(_props: Props)
-	local view, setView = useState("Home" :: View)
+	local view: types.View, setView = useState("Home" :: types.View)
 	local extension, setExtension = useState(nil :: PublishedExtension?)
 
 	local onBack = useCallback(function()
@@ -33,6 +37,15 @@ local function App(_props: Props)
 		Size = UDim2.fromScale(1, 1),
 		BackgroundTransparency = 1,
 	}, {
+		Layout = React.createElement("UIListLayout", {
+			SortOrder = Enum.SortOrder.LayoutOrder,
+		}),
+
+		NavBar = React.createElement(NavBar, {
+			views = VIEWS,
+			onNavigate = setView,
+		}),
+
 		Home = if view == "Home"
 			then React.createElement(HomeWrapper, {
 				onViewExtension = onViewExtension,
