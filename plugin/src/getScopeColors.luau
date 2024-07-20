@@ -3,7 +3,7 @@
 local Sift = require("@pkg/Sift")
 
 local function getScopeColors(theme): { [string]: string }
-	local colors = {}
+	local colors: { [string]: string } = {}
 
 	for _, token in theme.tokenColors do
 		local color = token.settings.foreground
@@ -13,7 +13,7 @@ local function getScopeColors(theme): { [string]: string }
 			-- some older themes, the scope can be a comma separated string
 			-- denoting the list of scopes, so we have to handle both cases
 			-- where the scope string is either a single scope, or many.
-			local scopes = {}
+			local scopes: { string } = {}
 			if token.scope then
 				if Sift.Array.is(token.scope) then
 					scopes = token.scope

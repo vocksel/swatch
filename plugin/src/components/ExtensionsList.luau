@@ -16,7 +16,7 @@ local ACTION_BUTTON_WIDTH = 120
 local PADDING = UDim.new(0, 8)
 
 local function ExtensionsList(props: Props)
-	local children = {
+	local children: { [string]: React.Node } = {
 		Layout = React.createElement("UIListLayout", {
 			Padding = PADDING,
 			SortOrder = Enum.SortOrder.LayoutOrder,
@@ -31,6 +31,9 @@ local function ExtensionsList(props: Props)
 	for i, extension in props.extensions do
 		local isEven = i % 2 == 0
 		local latestVersion = if extension.versions then extension.versions[1] else nil
+		local extensionName = if latestVersion
+			then `{extension.displayName} v{latestVersion.version}`
+			else extension.displayName
 
 		children[extension.extensionName] = React.createElement("Frame", {
 			LayoutOrder = i,
@@ -68,7 +71,7 @@ local function ExtensionsList(props: Props)
 					LayoutOrder = getLayoutOrder(),
 					AutomaticSize = Enum.AutomaticSize.XY,
 					BackgroundTransparency = 1,
-					Text = `{extension.displayName} v{latestVersion.version}`,
+					Text = extensionName,
 					TextSize = 16,
 					Font = Enum.Font.GothamMedium,
 					TextXAlignment = Enum.TextXAlignment.Left,

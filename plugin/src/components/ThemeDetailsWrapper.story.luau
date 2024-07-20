@@ -15,7 +15,7 @@ return {
 						version = "1.2.2",
 					},
 				},
-			},
+			} :: any,
 			onBack = function()
 				print("go back")
 			end,

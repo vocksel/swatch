@@ -16,12 +16,11 @@ return {
 						version = "1.2.2",
 					},
 				},
-			},
+			} :: any,
 			themes = themesSnapshot,
 			onBack = function()
 				print("go back")
 			end,
-			studio = {},
 		})
 	end,
 }

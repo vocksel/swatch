@@ -25,7 +25,7 @@ export type Props = {
 }
 
 local function ViewportTrigger(props: Props)
-	local ref: { current: Frame? } = useRef()
+	local ref: { current: Frame? } = useRef(nil)
 	local screen = useScreen(ref.current)
 	local position: Vector2, setPosition = useState(Vector2.zero)
 
@@ -45,7 +45,7 @@ local function ViewportTrigger(props: Props)
 			end
 		end
 		return false
-	end, { position, screen })
+	end, { position, screen } :: { unknown })
 
 	local wasInBounds = usePrevious(isInBounds)
 

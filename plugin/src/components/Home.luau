@@ -25,7 +25,7 @@ export type Props = {
 local function Home(props: Props)
 	local isLoading: boolean = useMemo(function()
 		return #props.extensions == 0 and not props.err
-	end, { props.extensions, props.err })
+	end, { props.extensions, props.err } :: { unknown })
 
 	local onSearch = useCallback(function(rbx: TextBox, enterPressed: boolean)
 		if enterPressed then

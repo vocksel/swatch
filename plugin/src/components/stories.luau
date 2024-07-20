@@ -3,7 +3,7 @@ local getLayoutOrder = require("./getLayoutOrder")
 
 type Story = {
 	name: string?,
-	story: (...any) -> Story,
+	story: (...any) -> React.Node,
 }
 
 local PADDING = 16

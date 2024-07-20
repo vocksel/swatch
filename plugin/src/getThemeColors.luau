@@ -2,9 +2,10 @@
 
 local Sift = require("@pkg/Sift")
 local constants = require("@root/constants")
+local types = require("@root/types")
 local getScopeColors = require("@root/getScopeColors")
 
-local function getThemeColors(theme): {
+local function getThemeColors(theme: types.ExtensionTheme): {
 	found: { [string]: string },
 	missing: { string },
 }
@@ -35,10 +36,12 @@ local function getThemeColors(theme): {
 					return token.scope == nil
 				end)
 
-				local global = theme.tokenColors[index]
+				if index then
+					local global = theme.tokenColors[index]
 
-				if global and global.settings then
-					color = global.settings.foreground
+					if global and global.settings then
+						color = global.settings.foreground
+					end
 				end
 			end
 

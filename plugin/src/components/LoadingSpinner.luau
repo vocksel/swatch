@@ -28,7 +28,7 @@ local function LoadingSpinner(providedProps: Props)
 			Image = "rbxasset://textures/DarkThemeLoadingCircle.png",
 			Size = UDim2.fromScale(1, 1),
 			BackgroundTransparency = 1,
-			Rotation = clock:map(function(n)
+			Rotation = clock:map(function(n: number)
 				return n * (props.speed * SPEED_MULTIPLIER)
 			end),
 		}),

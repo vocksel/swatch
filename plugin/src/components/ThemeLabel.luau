@@ -18,7 +18,7 @@ export type Props = {
 local function ThemeLabel(props: Props)
 	local previewedColors = useMemo(function()
 		local colors = getThemeColors(props.theme)
-		local elements = {}
+		local elements: { [string]: React.Node } = {}
 		local count = 0
 
 		for _, colorCode in colors.found do
@@ -42,18 +42,18 @@ local function ThemeLabel(props: Props)
 			end
 		end
 
-		for i = 1, NUM_PREVIEW_COLORS do
-			local color = colors.found[i]
+		-- for i = 1, NUM_PREVIEW_COLORS do
+		-- 	local color = colors.found[i]
 
-			if color then
-				elements[tostring(color)] = React.createElement("Frame", {
-					LayoutOrder = i,
-					BackgroundColor3 = color,
-					Size = UDim2.fromOffset(32, 32),
-					BorderSizePixel = 0,
-				})
-			end
-		end
+		-- 	if color then
+		-- 		elements[tostring(color)] = React.createElement("Frame", {
+		-- 			LayoutOrder = i,
+		-- 			BackgroundColor3 = color,
+		-- 			Size = UDim2.fromOffset(32, 32),
+		-- 			BorderSizePixel = 0,
+		-- 		})
+		-- 	end
+		-- end
 
 		return elements
 	end, { props.theme })

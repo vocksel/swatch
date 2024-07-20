@@ -19,7 +19,9 @@ local function applyTheme(theme: types.ExtensionTheme, studio: Studio): string?
 			end
 
 			local success, result = pcall(function()
-				studio[name] = Color3.fromHex(color)
+				-- Casting to `any` to clear dynamic property access warning
+				-- since we're already in a pcall
+				(studio :: any)[name] = Color3.fromHex(color)
 			end)
 
 			if not success then
