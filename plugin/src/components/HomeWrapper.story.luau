@@ -5,6 +5,7 @@ return {
 	story = function()
 		return React.createElement(HomeWrapper, {
 			onViewExtension = print,
+			onSearch = print,
 		})
 	end,
 }

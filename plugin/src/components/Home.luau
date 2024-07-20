@@ -28,7 +28,7 @@ local function Home(props: Props)
 	end, { props.extensions, props.err } :: { unknown })
 
 	local onSearch = useCallback(function(rbx: TextBox, enterPressed: boolean)
-		if enterPressed then
+		if enterPressed and rbx.Text ~= "" then
 			props.onSearch(rbx.Text)
 		end
 	end, {})
