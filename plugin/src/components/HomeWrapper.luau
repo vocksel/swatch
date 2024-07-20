@@ -11,13 +11,14 @@ local useEffect = React.useEffect
 local useState = React.useState
 
 export type Props = {
+	onSearch: (searchTerm: string) -> (),
 	onViewExtension: (extension: PublishedExtension) -> (),
+	searchTerm: string?,
 }
 
 local function HomeWrapper(props: Props)
 	local page, setPage = useState(1)
 	local extensions, setExtensions = useState({} :: { PublishedExtension })
-	local searchTerm, setSearchTerm = useState(nil :: string?)
 	local err, setErr = useState(nil :: string?)
 
 	local onFetchMore = useCallback(function()
@@ -28,14 +29,14 @@ local function HomeWrapper(props: Props)
 
 	useEffect(function()
 		setPage(1)
-	end, { searchTerm })
+	end, { props.searchTerm })
 
 	useEffect(function()
 		setErr(nil)
 		fetchVisualStudioExtensions({
 				page = page,
 				pageSize = 20,
-				searchTerm = if searchTerm then searchTerm else "theme",
+				searchTerm = if props.searchTerm then props.searchTerm else "theme",
 			})
 			:andThen(function(newExtensions)
 				setExtensions(function(prev)
@@ -49,13 +50,13 @@ local function HomeWrapper(props: Props)
 			:catch(function()
 				setErr(`No extensions found. Please try again later`)
 			end)
-	end, { searchTerm, page })
+	end, { props.searchTerm, page })
 
 	return React.createElement(Home, {
 		extensions = extensions,
 		err = err,
-		searchTerm = searchTerm,
-		onSearch = setSearchTerm,
+		searchTerm = props.searchTerm,
+		onSearch = props.onSearch,
 		onFetchMore = onFetchMore,
 		onViewExtension = props.onViewExtension,
 	})
