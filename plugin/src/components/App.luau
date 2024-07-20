@@ -16,9 +16,9 @@ export type Props = {
 }
 
 local function App(_props: Props)
-	local view, setView = useState("Home" :: View)
-	local extension, setExtension = useState(nil :: PublishedExtension?)
-	local searchTerm, setSearchTerm = useState(nil :: string?)
+	local view: View, setView = useState("Home" :: View)
+	local extension: PublishedExtension?, setExtension = useState(nil :: PublishedExtension?)
+	local searchTerm: string?, setSearchTerm = useState(nil :: string?)
 
 	local onBack = useCallback(function()
 		setExtension(nil)
@@ -42,7 +42,7 @@ local function App(_props: Props)
 			})
 			else nil,
 
-		ThemeDetails = if view == "ThemeDetails"
+		ThemeDetails = if view == "ThemeDetails" and extension
 			then React.createElement(ThemeDetailsWrapper, {
 				extension = extension,
 				onBack = onBack,

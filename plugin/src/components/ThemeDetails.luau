@@ -30,7 +30,7 @@ local function ThemeDetails(providedProps: Props)
 	local props: InternalProps = Sift.Dictionary.join(defaultProps, providedProps)
 
 	local latestVersion = if props.extension.versions then props.extension.versions[1] else nil
-	local themeVariants = {
+	local themeVariants: { [string]: React.Node } = {
 		Layout = React.createElement("UIListLayout", {
 			SortOrder = Enum.SortOrder.LayoutOrder,
 			Padding = PADDING,

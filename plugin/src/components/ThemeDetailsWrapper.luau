@@ -14,7 +14,7 @@ export type Props = {
 	onBack: () -> (),
 }
 
-local function ThemeDetailsWrapper(props: Props)
+local function ThemeDetailsWrapper(props: Props): React.Node
 	local err, setErr = useState(nil :: string?)
 	local themes, setThemes = useState(nil :: { types.ExtensionTheme }?)
 

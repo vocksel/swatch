@@ -20,9 +20,10 @@ return {
 									version = "1.2.3",
 								},
 							},
-						},
+						} :: any,
 					},
 					onViewExtension = print,
+					onSearch = print,
 				})
 			end,
 		},
@@ -33,6 +34,7 @@ return {
 				return React.createElement(Home, {
 					extensions = {},
 					onViewExtension = print,
+					onSearch = print,
 				})
 			end,
 		},
@@ -44,6 +46,7 @@ return {
 					extensions = {},
 					err = "Network error occurred",
 					onViewExtension = print,
+					onSearch = print,
 				})
 			end,
 		},

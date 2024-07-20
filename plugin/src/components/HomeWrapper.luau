@@ -19,7 +19,7 @@ export type Props = {
 local function HomeWrapper(props: Props)
 	local page, setPage = useState(1)
 	local extensions, setExtensions = useState({} :: { PublishedExtension })
-	local err, setErr = useState(nil :: string?)
+	local err: string?, setErr = useState(nil :: string?)
 
 	local onFetchMore = useCallback(function()
 		setPage(function(prev)

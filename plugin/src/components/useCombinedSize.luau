@@ -10,7 +10,7 @@ local useMemo = React.useMemo
 local useState = React.useState
 
 type SizeMap = {
-	[string]: number,
+	[string]: Vector2,
 }
 
 local function useCombinedSize()
