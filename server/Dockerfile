@@ -2,7 +2,7 @@
 
 FROM rust:1.75.0 AS lune
 
-ARG LUNE_VERSION
+ARG LUNE_VERSION="0.8.6"
 
 WORKDIR /app
 

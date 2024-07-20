@@ -33,8 +33,6 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: ./server
-          build-args: |
-            LUNE_VERSION=0.8.6
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
