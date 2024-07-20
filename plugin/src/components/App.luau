@@ -18,6 +18,7 @@ export type Props = {
 local function App(_props: Props)
 	local view, setView = useState("Home" :: View)
 	local extension, setExtension = useState(nil :: PublishedExtension?)
+	local searchTerm, setSearchTerm = useState(nil :: string?)
 
 	local onBack = useCallback(function()
 		setExtension(nil)
@@ -35,7 +36,9 @@ local function App(_props: Props)
 	}, {
 		Home = if view == "Home"
 			then React.createElement(HomeWrapper, {
+				onSearch = setSearchTerm,
 				onViewExtension = onViewExtension,
+				searchTerm = searchTerm,
 			})
 			else nil,
 

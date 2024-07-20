@@ -7,11 +7,12 @@ local PADDING = UDim.new(0, 8)
 export type Props = {
 	searchTerm: string?,
 	onSearch: (searchTerm: string) -> (),
+	LayoutOrder: number?,
 }
 
 local function Searchbar(props: Props)
 	local onSearch = useCallback(function(rbx: TextBox, enterPressed: boolean)
-		if enterPressed then
+		if enterPressed and rbx.Text ~= "" then
 			props.onSearch(rbx.Text)
 		end
 	end, { props.onSearch })
